@@ -25,17 +25,31 @@ public class DBmanager {
 		}
 	}
 	
+	// 6) (사업자) 캠핑룸 삭제 메소드
+	public static int deleteCampingRoom(int cr_no) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		re = session.delete("campingRoom.deleteCampingRoom", cr_no);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	// 5) (사업자) 캠핑룸 업데이트 메소드
+	public static int updateCampingRoom(CampingRoomVo crvo) {
+		int re = -1;			
+		SqlSession session = factory.openSession();
+		re = session.update("campingRoom.updateCampingRoom", crvo);
+		session.commit();
+		session.close();
+		return re;
+	}
 	
 	// 4) (사업자) 캠핑룸 등록 메소드
 	public static int insertCampingRoom(CampingRoomVo crvo) {
 		int re = -1;			
 		SqlSession session = factory.openSession();
 		re = session.insert("campingRoom.insertCampingRoom", crvo);
-		if(re > 0 ) {
-			System.out.println("캠핑룸 등록 성공");
-		}else {
-			System.out.println("캠핑룸 등록 실패");
-		}
 		session.commit();
 		session.close();
 		return re;
@@ -64,11 +78,6 @@ public class DBmanager {
 		int re = -1;
 		SqlSession session = factory.openSession();
 		re = session.insert("campingSpot.insertCampingSpot", csvo);
-		if(re > 0 ) {
-			System.out.println("캠핑장 등록 성공");
-		}else {
-			System.out.println("캠핑장 등록 실패");
-		}
 		session.commit();
 		session.close();
 		return re;	

@@ -11,6 +11,17 @@ import com.example.demo.vo.CampingSpotVo;
 @Repository
 public class CampingDao {
 	
+	
+	// 6) (사업자) 캠핑룸 삭제 dao
+	public int deleteCampingRoom(int cr_no) {
+		return DBmanager.deleteCampingRoom(cr_no);
+	}
+	
+	// 5) (사업자) 캠핑룸 업데이트 dao
+	public int updateCampingRoom(CampingRoomVo crvo) {
+		return DBmanager.updateCampingRoom(crvo);
+	}
+	
 	// 4) (사업자) 캠핑룸 등록 dao
 	public int insertCampingRoom(CampingRoomVo crvo) {
 		return DBmanager.insertCampingRoom(crvo);

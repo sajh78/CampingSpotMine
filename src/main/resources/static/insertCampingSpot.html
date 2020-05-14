@@ -12,7 +12,7 @@
 			
 			$("#cstb").empty();
 			
-			$.getJSON("/bossCampingSpotList",function(data){
+			$.getJSON("/bossCampingSpotList.do",function(data){
 				//alert(data);
 				$("#cstb").html("<th>캠핑장명</th><th>캠핑장전화</th><th>캠핑장주소1</th><th>캠핑장주소2</th><th>캠핑장홈페이지</th><th>사업자계좌번호</th><th>글램핑수</th><th>카라반수</th><th>오토캠핑수</th><th>캠핑테마</th><th>캠핑시설</th><th>캠핑장 상세설명</th>");
 				$.each(data, function(idx, cs){
@@ -49,7 +49,8 @@
 		// 캠핑장 등록하기
 		$("#csInsert").click(function(){
 			var cs = $("#f").serializeArray();
-			$.ajax("/insertCampingSpot",{data:cs, success:function(r){
+			alert(cs)
+			$.ajax("/insertCampingSpot.do",{data:cs, success:function(r){
 				alert(r);
 				$("#f input").val("");
 				listCampingSpot();

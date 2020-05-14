@@ -5,11 +5,19 @@
 <mapper namespace="campingRoom">
 
 	<select id="listCampingRoom" resultType="crVo">
-		select cr_no, cr_name, cr_type, cr_max, cr_price, cr_peak_price from camping_room order by cr_no
+		select cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type from camping_room order by cr_no
 	</select>
 	
 	<insert id="insertCampingRoom">
 		insert into camping_room values(seq_camping_room.nextval,#{cr_name},#{cr_max},#{cr_checkin},#{cr_checkout},#{cr_price},#{cr_peak_price},#{cr_type},#{cs_no})
 	</insert>
+	
+	<update id="updateCampingRoom">
+		update camping_room set cr_name = #{cr_name},cr_max= #{cr_max},cr_checkin=#{cr_checkin},cr_checkout= #{cr_checkout},cr_price=#{cr_price},cr_peak_price=#{cr_peak_price},cr_type=#{cr_type} where cr_no=#{cr_no} and cs_no = #{cs_no}
+	</update>
+	
+	<delete id="deleteCampingRoom">
+		delete camping_room where cr_no = #{cr_no};
+	</delete>
 	
 </mapper>

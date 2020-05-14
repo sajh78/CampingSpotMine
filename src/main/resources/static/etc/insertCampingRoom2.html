@@ -7,17 +7,27 @@
 .active{
 	background: lavendar;
 }
+#updateForm{
+	display: none; 
+}
+
 </style>
 </head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		
-		// 수정입력란 숨기기
+		
 		$("#updateForm").hide();
 		
 		// 주소창의 cs_no의 숫자만 가져오기
-		var cs_no = Number(location.search.substring(location.search.indexOf("=")+1));
+		var cs_no = Number(location.search.substring(location.search.indexOf("=")+1));	
+		//alert(cs_no)
+		
+		// 가져온 cs_no(문자열)를 숫자로 변환
+		//cs_no = Number(cs_no);
+		//alert(typeof cs_no)
+		//alert(cs_no)
 		
 		// 캠핑룸 목록 함수
 		function listCampingRoom(){
@@ -39,11 +49,11 @@
 					$("#crtb").append(tr);
 				});
 			});
-		}//end캠핑룸 목록 함수
+		}
 		
 		// 1) 캠핑룸 목록보기
 		listCampingRoom();
-	
+				
 		// 2) 캠핑룸 등록하기
 		$("#crInsert").click(function(){
 			$("#i_cs_no").val(cs_no);
@@ -53,17 +63,17 @@
 				listCampingRoom();
 				$("#insertF input").val("");
 			}});
-		});//end 캠핑룸 등록
-		
+		});
+
 		// 3) 캠핑룸 수정하기
 		$("#crUpdate").click(function(){
-			
 			$("#h2").html("캠핑룸 수정/삭제");
 			$("#updateForm").show();
 			$("#insertForm").hide();
-			
+
 			$("#crtb").empty();
 			$.getJSON("/bossCampingRoomList.do", function(data){
+				//alert(data);
 				$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
 				$.each(data, function(idx, cr){
 					var tr = $("<tr></tr>");
@@ -75,55 +85,43 @@
 					var cr_price = $("<td></td>").html(cr.cr_price);
 					var cr_peak_price = $("<td></td>").html(cr.cr_peak_price);
 					var cr_type = $("<td></td>").html(cr.cr_type);
-					
 					$(tr).append(cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);
 					
-						// 클릭한 내용 가져오기
-						$(tr).attr("idx", idx);
-						$(tr).click(function(){
-							$("tr").removeClass("active");
-							$(this).addClass("active");
-							var idx = $(this).attr("idx");
-							
-							$("#u_cr_no").val(data[idx].cr_no).css("visibility", "hidden");
-							$("#u_cr_name").val(data[idx].cr_name);
-							$("#u_cr_max").val(data[idx].cr_max);
-							$("#u_cr_checkin").val(data[idx].cr_checkin);
-							$("#u_cr_checkout").val(data[idx].cr_checkout);
-							$("#u_cr_price").val(data[idx].cr_price);
-							$("#u_cr_peak_price").val(data[idx].cr_peak_price);
-							$("#u_cr_type").val(data[idx].cr_type);
-								
-								// 4) 최종 수정하기
-								$("#crUpdateOK").click(function(){
-									$("#u_cs_no").val(cs_no);
-									var crUpdate = $("#updateF").serialize();
-										$.ajax("/updateCampingRoom.do",{data:crUpdate, success:function(r){
-											alert(r);
-											listCampingRoom();
-											$("#updateForm input").val("");
-										}});//end update Ajax
-								})//end #crUpdateOK
-														
-					})//end clickTR
+					// 클릭한 내용 가져오기
+					$(tr).attr("idx", idx);
+					$(tr).click(function(){
 					
-					$("#crtb").append(tr);	
+						$("tr").removeClass("active");
+						$(this).addClass("active");
+						var idx = $(this).attr("idx");
 						
-				})// end each
-				
-			})//end getJSON
-			
-		});//end #crUpdate
-		
-		
-		// 5) 최종 삭제하기
-		$("#crDelete").click(function(){
-			var cr_no = $("#u_cr_no").val(cr_no);
-			$.ajax("/deleteCampingRoom.do",{data:{"cr_no":cr_no}, success:function(r){
-
-			}});//end delete ajax
-		})//end #crDelete
-		
+						$("#u_cr_no").val(data[idx].cr_no).css("visibility", "hidden");
+						$("#u_cr_name").val(data[idx].cr_name);
+						$("#u_cr_max").val(data[idx].cr_max);
+						$("#u_cr_checkin").val(data[idx].cr_checkin);
+						$("#u_cr_checkout").val(data[idx].cr_checkout);
+						$("#u_cr_price").val(data[idx].cr_price);
+						$("#u_cr_peak_price").val(data[idx].cr_peak_price);
+						$("#u_cr_type").val(data[idx].cr_type);
+						
+						// 4) 최종 수정하기
+						$("#crUpdateOK").click(function(){
+							$("#u_cs_no").val(cs_no);
+							var crUpdate = $("#updateF").serialize();
+							$("#crUpdateOK").click(function(){
+								$.ajax("/updateCampingRoom.do",{data:crUpdate, success:function(r){
+									alert(r);
+									listCampingRoom();
+									$("#updateForm input").val("");
+								}});
+							});	
+						});
+					});
+								
+					$("#crtb").append(tr);
+				});
+			});
+		}});
 });	
 </script>
 <body>

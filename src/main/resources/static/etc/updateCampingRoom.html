@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+.active{
+	background: lavender;
+}
+
+</style>
+</head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		// 주소창의 cs_no의 숫자만 가져오기
+		var cr_no = Number(location.search.substring(location.search.indexOf("=")+1));	
+		//alert(cr_no)
+		
+		// 캠핑룸 목록 메소드
+		function listCampingRoom(){
+			$("#crtb").empty();
+			$.getJSON("/bossCampingRoomList.do", function(data){
+				//alert(data);
+				$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
+				$.each(data, function(idx, cr){
+					var tr = $("<tr></tr>");
+					var cr_no = $("<td></td>").html(cr.cr_no);
+					var cr_name = $("<td></td>").html(cr.cr_name);
+					var cr_max = $("<td></td>").html(cr.cr_max);
+					var cr_checkin = $("<td></td>").html(cr.cr_checkin);
+					var cr_checkout = $("<td></td>").html(cr.cr_checkout);
+					var cr_price = $("<td></td>").html(cr.cr_price);
+					var cr_peak_price = $("<td></td>").html(cr.cr_peak_price);
+					var cr_type = $("<td></td>").html(cr.cr_type);
+					$(tr).append(cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);
+					
+					// 클릭한 내용 가져오기
+					$(tr).attr("idx", idx);
+					$(tr).click(function(){
+						$("tr").removeClass("active");
+						$(this).addClass("active");
+						var id = $(this).attr("idx");
+						
+						$("#cr_name").val(data[idx].cr_name);
+						$("#cr_max").val(data[idx].cr_max);
+						$("#cr_checkin").val(data[idx].cr_checkin);
+						$("#cr_checkout").val(data[idx].cr_checkout);
+						$("#cr_price").val(data[idx].cr_price);
+						$("#cr_peak_price").val(data[idx].cr_peak_price);
+						$("#cr_type").val(data[idx].cr_type);
+					});
+					
+					$("#crtb").append(tr);
+				});
+			});
+		}
+				
+		// 1) 캠핑룸 목록보기
+		listCampingRoom();
+		
+		// 3 캠핑룸 수정하기
+		$("#crUpdate").click(function(){
+			$("#cs_no").val(cs_no);
+			$("#cr_no").val(cr_no);
+			var crData = $("#f").serialize();
+			alert(crData)
+			$.ajax("/updateCampingRoom.do",{data:crData, success:function(r){
+				alert(r);
+				listCampingRoom();
+				$("#f input").val("");
+			}});
+		});
+	
+	});
+</script>
+<body>
+	<h2>캠핑룸 수정/삭제</h2>
+			<form id="f" >
+			<table>
+				<tr>
+					<th>캠핑룸명</th>
+					<th><input type="text" id="cr_name" name="cr_name"></th>
+				</tr>
+				<tr>
+					<th>최대인원수</th>
+					<th><input type="text" id="cr_max" name="cr_max"></th>
+				</tr>
+				<tr>
+					<th>체크인시간</th>
+					<th><input type="text" id="cr_checkin" name="cr_checkin"></th>
+				</tr>
+				<tr>
+					<th>체크아웃시간</th>
+					<th><input type="text" id="cr_checkout" name="cr_checkout"></th>
+				</tr>
+				<tr>
+					<th>캠핑요금</th>
+					<th><input type="text" id="cr_price" name="cr_price"></th>
+				</tr>
+				<tr>
+					<th>성수기요금</th>
+					<th><input type="text" id="cr_peak_price" name="cr_peak_price"></th>
+				</tr>
+				<tr>
+					<th>캠핑타입</th>
+					<th>
+						<select id="cr_type" name="cr_type">
+							<option value="글램핑">글램핑</option>
+							<option value="카라반">카라반</option>
+							<option value="오토캠핑">오토캠핑</option>
+						</select>
+					</th>
+				</tr>
+				<tr>
+					<th><input type="hidden" id="cs_no" name="cs_no"></th>
+				</tr>
+				<tr>
+					<th><input type="hidden" id="cr_no" name="cr_no"></th>
+				</tr>
+			</table>
+		</form>
+		<br>
+		<button id="crUpdate">수정</button>
+		<button id="crDelete">삭제</button>
+		<button id="crReset">취소</button>
+		<br><br>
+		<hr>
+			<table id="crtb" border="1" width="80%">
+		<tr>
+			<th>캠핑룸번호</th>
+			<th>캠핑룸명</th>
+			<th>최대인원수</th>
+			<th>체크인시간</th>
+			<th>체크아웃시간</th>
+			<th>요금</th>
+			<th>성수기요금</th>
+			<th>캠핑룸타입</th>
+		</tr>
+	</table>
+</body>
+</html>
