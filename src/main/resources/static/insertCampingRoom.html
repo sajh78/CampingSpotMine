@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		// 주소창의 cs_no의 숫자만 가져오기
+		var cs_no = location.search.substring(location.search.indexOf("=")+1);	
+		
+		// 가져온 cs_no(문자열)를 숫자로 변환
+		cs_no = Number(cs_no);
+		//alert(typeof cs_no)
+		//alert(cs_no)
+		
+		// 캠핑룸 목록 메소드
+		function listCampingRoom(){
+			$.getJSON("/bossCampingRoomList", function(data){
+				//alert(data);
+				$.each(data, function(idx, cr){
+					var tr = $("<tr></tr>");
+					var cr_no = $("<td></td>").html(cr.cr_no);
+					var cr_name = $("<td></td>").html(cr.cr_name);
+					var cr_max = $("<td></td>").html(cr.cr_max);
+					var cr_price = $("<td></td>").html(cr.cr_price);
+					var cr_peak_price = $("<td></td>").html(cr.cr_peak_price);
+					var cr_type = $("<td></td>").html(cr.cr_type);
+					$(tr).append(cr_no, cr_name, cr_max, cr_price, cr_peak_price, cr_type);
+					$("#crtb").append(tr);
+				});
+			});
+		}
+		
+		// 1) 캠핑룸 목록보기
+		listCampingRoom();
+	
+		// 2) 캠핑룸 등록하기
+		$("#crInsert").click(function(){
+			var cr = $("#f").serialize();
+			alert(cr)
+			$.ajax("/insertCampingRoom",{data:cr, success:function(r){
+				alert(r);
+				listCampingRoom();
+			}});
+		});
+
+
+	});
+</script>
+<body>
+	<h1>캠핑룸</h1>
+	<table id="crtb" border="1" width="80%">
+		<tr>
+			<th>캠핑룸번호</th>
+			<th>캠핑룸명</th>
+			<th>최대인원수</th>
+			<th>요금</th>
+			<th>성수기요금</th>
+			<th>캠핑룸타입</th>
+		</tr>
+	</table>
+	<hr>	
+	<h2>캠핑룸 등록</h2>
+			<form id="f" >
+			<table>
+				<tr>
+					<th>캠핑룸명</th>
+					<th><input type="text" name="cr_name"></th>
+				</tr>
+				<tr>
+					<th>최대인원수</th>
+					<th><input type="text" name="cr_max"></th>
+				</tr>
+				<tr>
+					<th>체크인시간</th>
+					<th><input type="text" name="cr_checkin"></th>
+				</tr>
+				<tr>
+					<th>체크아웃시간</th>
+					<th><input type="text" name="cr_checkout"></th>
+				</tr>
+				<tr>
+					<th>캠핑요금</th>
+					<th><input type="text" name="cr_price"></th>
+				</tr>
+				<tr>
+					<th>성수기요금</th>
+					<th><input type="text" name="cr_peak_price"></th>
+				</tr>
+				<tr>
+					<th>캠핑타입</th>
+					<th>
+						<select name="cr_type">
+							<option value="글램핑">글램핑</option>
+							<option value="카라반">카라반</option>
+							<option value="오토캠핑">오토캠핑</option>
+						</select>
+					</th>
+				</tr>
+				<tr>
+					<th><input type="hidden" name="cs_no" value="cs_no"></th>
+				</tr>
+			</table>
+		</form>
+		<button id="crInsert">등록</button>
+		<button id="crUpdate">수정</button>
+		<button id="crReset">취소</button>
+</body>
+</html>

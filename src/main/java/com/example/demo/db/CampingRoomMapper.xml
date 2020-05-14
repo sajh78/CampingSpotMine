@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="campingRoom">
+
+	<select id="listCampingRoom" resultType="crVo">
+		select cr_no, cr_name, cr_type, cr_max, cr_price, cr_peak_price from camping_room order by cr_no
+	</select>
+	
+	<insert id="insertCampingRoom">
+		insert into camping_room values(seq_camping_room.nextval,#{cr_name},#{cr_max},#{cr_checkin},#{cr_checkout},#{cr_price},#{cr_peak_price},#{cr_type},#{cs_no})
+	</insert>
+	
+</mapper>
