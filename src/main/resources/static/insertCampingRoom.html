@@ -22,9 +22,10 @@
 		// 캠핑룸 목록 함수
 		function listCampingRoom(){
 			$("#crtb").empty();
+			$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
+
 			$.getJSON("/bossCampingRoomList.do", function(data){
 				//alert(data);
-				$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
 				$.each(data, function(idx, cr){
 					var tr = $("<tr></tr>");
 					var cr_no = $("<td></td>").html(cr.cr_no);
@@ -104,7 +105,7 @@
 											$("#updateForm input").val("");
 										}});//end update Ajax
 								})//end #crUpdateOK
-														
+													
 					})//end clickTR
 					
 					$("#crtb").append(tr);	
@@ -116,19 +117,35 @@
 		});//end #crUpdate
 		
 		
-		// 5) 최종 삭제하기
+ 		// 5) 캠핑룸 삭제하기
 		$("#crDelete").click(function(){
-			var cr_no = $("#u_cr_no").val(cr_no);
+			var cr_no = $("#u_cr_no").val();
 			$.ajax("/deleteCampingRoom.do",{data:{"cr_no":cr_no}, success:function(r){
-
+				alert(r);
+				listCampingRoom();
 			}});//end delete ajax
+			
 		})//end #crDelete
 		
 });	
 </script>
 <body>
 
-	<h2 id="h2">캠핑룸 등록</h2>
+		<h2 id="h2">캠핑룸 등록</h2>
+		<table id="crtb" border="1" width="80%">
+			<tr>
+				<th>캠핑룸번호</th>
+				<th>캠핑룸명</th>
+				<th>최대인원수</th>
+				<th>체크인시간</th>
+				<th>체크아웃시간</th>
+				<th>요금</th>
+				<th>성수기요금</th>
+				<th>캠핑룸타입</th>
+			</tr>
+		</table>
+		<br>
+		<hr>
 		<div id="insertForm">
 			<form id="insertF" >
 				<table id="insertTb">
@@ -176,24 +193,9 @@
 		<button id="crUpdate">수정</button>
 		<button id="crReset">취소</button>
 		<br>
-	<hr>
 </div>
-	<br>
-		<table id="crtb" border="1" width="80%">
-			<tr>
-				<th>캠핑룸번호</th>
-				<th>캠핑룸명</th>
-				<th>최대인원수</th>
-				<th>체크인시간</th>
-				<th>체크아웃시간</th>
-				<th>요금</th>
-				<th>성수기요금</th>
-				<th>캠핑룸타입</th>
-			</tr>
-		</table>
-		<br>
+
 	  <div id="updateForm">
-	  	<hr>
 			<form id="updateF" >
 				<table id="updateTb">
 					<tr>

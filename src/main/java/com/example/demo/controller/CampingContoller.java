@@ -1,10 +1,15 @@
 package com.example.demo.controller;
 
+import java.io.FileOutputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.CampingDao;
 import com.example.demo.vo.CampingRoomVo;
@@ -76,8 +81,34 @@ public class CampingContoller {
 	
 	@RequestMapping("/insertCampingSpot.do")
 	// 1) (사업자) 캠핑장 등록하기
-	public String insertCampingSpot(CampingSpotVo csvo) {
+	public String insertCampingSpot(CampingSpotVo csvo, HttpServletRequest request) {
 		String str = "캠핑장 등록을 성공하였습니다.";
+		
+		//이미지 업로드
+		//String path = new HttpServletRequestWrapper(request).getRealPath("/");
+		//String path = request.getRealPath("resources/static/img");
+		String path = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
+		
+		System.out.println(path);
+		MultipartFile uploadFile = csvo.getUploadFile();
+		String cs_licence_fname ="";
+		if(uploadFile != null) {
+			cs_licence_fname = uploadFile.getOriginalFilename();
+			System.out.println("오리지널 fname: " + cs_licence_fname);
+			try {
+				byte []data = uploadFile.getBytes();
+				FileOutputStream fos = new FileOutputStream(path + "/" + cs_licence_fname);
+				//FileOutputStream fos = new FileOutputStream(path + cs_licence_fname);
+				//System.out.println(fos);
+				fos.write(data);
+				fos.close();
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		csvo.setCs_licence_fname(cs_licence_fname);
+		
 		cDao.insertCampingSpot(csvo);
 		return str;
 	}

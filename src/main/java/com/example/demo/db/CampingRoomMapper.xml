@@ -17,7 +17,7 @@
 	</update>
 	
 	<delete id="deleteCampingRoom">
-		delete camping_room where cr_no = #{cr_no};
+		delete camping_room where cr_no = #{cr_no}
 	</delete>
 	
 </mapper>
