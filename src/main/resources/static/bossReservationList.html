@@ -3,8 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		// 팝업창 함수
+		
+		// 예약 관리 현황 목록보기
+		$.getJSON("/bossReservationList.do",function(data){
+			$.each(data, function(idx, br){
+				
+				//console.log(br.r_revstatus)
+				console.log(br.r_cancel)
+				
+				var tr = $("<tr></tr>");
+				var r_no = $("<td></td>").html(br.r_no);
+				var mc_name = $("<td></td>").html(br.mc_name);
+				var mc_tel = $("<td></td>").html(br.mc_tel);
+				var cr_name = $("<td></td>").html(br.cr_name);
+				var r_date = $("<td></td>").html(br.r_date);
+				var r_checkin = $("<td></td>").html(br.r_checkin);
+				var r_price = $("<td></td>").html(br.r_price);
+				
+				var r_revstatus = br.r_revstatus;
+				if (r_revstatus == 1 ){
+					r_revstatus = $("<td></td>").html("예약완료");
+				} else {
+					r_revstatus = $("<td></td>").html("예약대기");
+				}
+				
+				var r_cancel = br.r_cancel;
+				if (r_cancel == 2 ){
+					r_cancel = $("<td></td>").html("취소완료");
+				} else {
+					r_cancel = $("<td></td>").html("취소대기");
+				}
+				
+			
+				$(tr).append(r_no,mc_name,mc_tel,cr_name,r_date,r_checkin,r_price,r_revstatus,r_cancel);
+				$("#rTB").append(tr);
+				
+				
+			});//end each
+			
+		});//end getJSON
+		
+		
+	});//end function
+</script>
 </head>
 <body>
-
+	<h2>캠핑장 예약 현황</h2>
+	<hr>
+	<br>
+	<div id="rList">
+		<table id="rTB" border="1">
+			<tr>
+				<th>예약번호</th>
+				<th>예약자명</th>
+				<th>연락처</th>
+				<th>캠핑룸명</th>
+				<th>예약날짜</th>
+				<th>체크인날짜</th>
+				<th>결제요금</th>
+				<th>예약상태</th>
+				<th>취소상태</th> 
+				<th>비고</th>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

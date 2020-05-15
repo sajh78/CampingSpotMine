@@ -7,6 +7,7 @@
   <typeAliases>
     <typeAlias type="com.example.demo.vo.CampingSpotVo" alias="csVo"/>
   	<typeAlias type="com.example.demo.vo.CampingRoomVo" alias="crVo"/>
+  	<typeAlias type="com.example.demo.vo.BossReservationVo" alias="bossRVo"/>
   </typeAliases>
   <environments default="development">
     <environment id="development">
@@ -22,5 +23,6 @@
   <mappers>
   	<mapper resource="com/example/demo/db/CampingSpotMapper.xml"/>
     <mapper resource="com/example/demo/db/CampingRoomMapper.xml"/>
+    <mapper resource="com/example/demo/db/ReservationMapper.xml"/>
   </mappers>
 </configuration>

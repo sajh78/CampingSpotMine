@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.example.demo.vo.BossReservationVo;
 import com.example.demo.vo.CampingRoomVo;
 import com.example.demo.vo.CampingSpotVo;
 
@@ -24,6 +25,15 @@ public class DBmanager {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	// 7) (사업자) 예약 관리 현황 메소드
+	public static List<BossReservationVo> bossReservationList(){
+		List<BossReservationVo> bossRList = null;
+		SqlSession session = factory.openSession();
+		bossRList = session.selectList("reservation.bossReservationList");
+		session.close();
+		return bossRList;
+ 	}
 	
 	// 6) (사업자) 캠핑룸 삭제 메소드
 	public static int deleteCampingRoom(int cr_no) {
