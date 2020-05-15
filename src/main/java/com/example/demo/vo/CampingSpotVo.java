@@ -33,4 +33,6 @@ public class CampingSpotVo {
 	private String mb_id;
 	
 	private MultipartFile uploadFile;
+	private MultipartFile CampingUploadFile;
+	private MultipartFile MapUploadFile;
 }

@@ -79,22 +79,24 @@ public class CampingContoller {
 		return str;
 	}
 	
-	@RequestMapping("/insertCampingSpot.do")
 	// 1) (사업자) 캠핑장 등록하기
+	@RequestMapping("/insertCampingSpot.do")
 	public String insertCampingSpot(CampingSpotVo csvo, HttpServletRequest request) {
 		String str = "캠핑장 등록을 성공하였습니다.";
 		
-		//이미지 업로드
+		//1.사업자등록증 업로드
 		//String path = new HttpServletRequestWrapper(request).getRealPath("/");
 		//String path = request.getRealPath("resources/static/img");
 		String path = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
 		
 		System.out.println(path);
 		MultipartFile uploadFile = csvo.getUploadFile();
-		String cs_licence_fname ="";
+		String cs_licence_fname =""; 	// 사업자등록증 파일이름
+		
 		if(uploadFile != null) {
 			cs_licence_fname = uploadFile.getOriginalFilename();
-			System.out.println("오리지널 fname: " + cs_licence_fname);
+			System.out.println("사업자등록증 오리지널 fname:" + cs_licence_fname);
+
 			try {
 				byte []data = uploadFile.getBytes();
 				FileOutputStream fos = new FileOutputStream(path + "/" + cs_licence_fname);
@@ -102,12 +104,59 @@ public class CampingContoller {
 				//System.out.println(fos);
 				fos.write(data);
 				fos.close();
+								
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		//2.캠핑장이미지 업로드
+		String Cpath = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
+		
+		System.out.println(Cpath);
+		MultipartFile CampingUploadFile = csvo.getCampingUploadFile();
+		String cs_camp_fname =""; 	// 캠핑장이미지 파일이름
+		
+		if(CampingUploadFile != null) {
+			cs_camp_fname = CampingUploadFile.getOriginalFilename();
+			System.out.println("캠핑장 오리지널 fname:" + cs_camp_fname);
+
+			try {
+				byte []cdata = CampingUploadFile.getBytes();
+				FileOutputStream cfos = new FileOutputStream(Cpath + "/" + cs_camp_fname);
+
+				cfos.write(cdata);
+				cfos.close();
+								
+			}catch(Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		
+		// 3.지도 이미지 업로드
+		String Mpath = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
+		System.out.println(Mpath);
+		
+		MultipartFile MapUploadFile = csvo.getMapUploadFile();
+		String cs_map_fname = "";
+		
+		if(MapUploadFile != null) {
+			cs_map_fname = MapUploadFile.getOriginalFilename();
+			System.out.println("약도 오리지널 fname:" + cs_map_fname);
+			try {
+				byte []mdata = MapUploadFile.getBytes();
+				FileOutputStream mfos = new FileOutputStream(Mpath + "/" + cs_map_fname);
+				
+				mfos.write(mdata);
+				mfos.close();
 			}catch(Exception e) {
 				System.out.println(e.getMessage());
 			}
 		}
 		
 		csvo.setCs_licence_fname(cs_licence_fname);
+		csvo.setCs_camp_fname(cs_camp_fname);
+		csvo.setCs_map_fname(cs_map_fname);
 		
 		cDao.insertCampingSpot(csvo);
 		return str;

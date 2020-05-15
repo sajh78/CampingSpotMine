@@ -4,11 +4,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-#imgLicence{
-	width : 200px;
-	height : 200px;
-	border: 1px solid;
-}
+	
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
@@ -41,21 +37,35 @@
 					//console.log(cs_fac[0]);
 					
 					$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain,cs_url,cs_account,cs_glamping_cnt,cs_caravan_cnt,cs_autocamping_cnt,cs_theme,cs_fac,cs_detail);
+										
+					$("#cstb").append(tr);
 					
+					// 사업자등록증 이미지 업로드
+					//alert(cs.cs_camp_fname)
+					console.log(cs.cs_licence_fname)
+					//var Limg = $("<img></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
+					var Limg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":200, "height":200});
+					var imgLicence = $("#divImgLicence").append(Limg);
+					$("#divImgForm").append(imgLicence); 
+					
+					// 캠핑장 이미지 업로드
+					//alert(cs.cs_camp_fname)
+					console.log(cs.cs_camp_fname)
+					//var Cimg = $("<img></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
+					var Cimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":200, "height":200});
+					var imgCamping = $("#divImgCamping").append(Cimg);
+					$("#divImgForm").append(imgCamping); 
+					
+					// 지도 이미지 업로드
+					console.log(cs.cs_map_fname);
+					var Mimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_map_fname, "width":200, "height":200});
+					var imgMap = $("#divImgMap").append(Mimg);
+					$("#divImgForm").append(imgMap);
+										
 					// 캠핑룸등록 이동하기
 					$("#btnCR").click(function(){
 						window.location.href="insertCampingRoom.html?cs_no="+cs.cs_no;
 					});
-					
-					$("#cstb").append(tr);
-					
-					// 사업자등록증 이미지 보이기
-					//alert(cs.cs_licence_fname)
-					console.log(cs.cs_licence_fname)
-					var Limg = $("<img></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":200, "height":200});
-					var imgLicence = $("#imgLicence").append(Limg);
-					$("#imgForm").append(imgLicence);
-					
 				
 				}); //end each
 				
@@ -112,11 +122,10 @@
 				<th>캠핑장 상세설명</th>
 			</tr>
 		</table>
-		<div id="imgForm">
-			<br>
-			<div id="imgLicence"></div>
-			<div id="imgCamping"></div>
-			<div id="imgMap"></div>
+		<div id="divImgForm">
+			<div id="divImgLicence"></div>
+			<div id="divImgCamping"></div>
+			<div id="divImgMap"></div>
 		</div>
 		<br>
 		<button id="btnCR">캠핑룸 등록으로 이동</button>		
@@ -172,11 +181,11 @@
 				</tr>
 				<tr>
 					<th>캠핑장 사진</th>
-					<td><input type="text" name="cs_camp_fname" id="cs_camp_fname"></td>
+					<td><input type="file" name="CampingUploadFile" id="CampingUploadFile"></td>
 				</tr>
 				<tr>
 					<th>약도/ 주변시설 사진</th>
-					<td><input type="text" name="cs_map_fname" id="cs_map_fname"></td>
+					<td><input type="file" name="MapUploadFile" id="MapUploadFile"></td>
 				</tr>
 				<tr>
 					<th>캠핑장 위도</th>
