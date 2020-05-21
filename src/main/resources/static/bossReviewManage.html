@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	.active{
+		background: lavender;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+				
+		$("#insertCreRe").css("display", "none");
+		
+ 		$.ajax("/bossCRRList.do",{data:{},success:function(){
+			
+		}})//end 댓글상세 ajax
+		 
+		// 1) 리뷰관리 목록 불러오기
+		//$("#crtb").empty();
+		//$("#crtb").html("<th>번호</th><th>아이디</th><th>리뷰글내용</th><th>별점</th><th>리뷰등록일</th><th>댓글현황</th><th>삭제</th>");
+		$.getJSON("/bossCampingReviewList.do",function(data){
+			//alert(data)
+			$.each(data, function(idx,cre){
+				var tr = $("<tr></tr>");
+				var no = $("<td></td>").html(idx+1);
+				//console.log(idx)
+ 				var mc_id = $("<td></td>").html(cre.mc_id);
+				var cre_contents = $("<td></td>").html(cre.cre_content);
+				var cre_rate = $("<td></td>").html(cre.cre_rate);
+				var cre_date = $("<td></td>").html(cre.cre_date);
+				
+				// 댓글 대기 or 완료		
+				var re_check = $("<td></td>");
+				var a = $("<a></a>").html();
+				if(cre.re_check > 0){
+					a = $("<a></a>").html("댓글완료");
+					
+				} else {
+					a = $("<a></a>").html("댓글대기").css("color", "blue");
+				}
+				
+				$(re_check).append(a);
+				
+				//var re_check = $("<td></td>").html(cre.re_check);
+				
+				// 삭제 버튼
+				//var btdDel = $("<button id='deleteCreRe'></button>").html("삭제")
+				
+				var cre_no = cre.cre_no;
+				//console.log(cre_no)
+								
+				$(tr).append(no, mc_id, cre_contents, cre_rate, cre_date, re_check);
+					
+				// 리뷰글 클릭한 내용 가져오기
+				$(tr).attr("idx", idx);
+				$(tr).click(function(){
+					
+					$("#insertCreRe").show();
+					
+					$("tr").removeClass("active");
+					$(this).addClass("active");
+					var idx = $(this).attr("idx");
+					
+					$("#cre_no").val(cre_no);
+					//console.log(cre_no)
+					//alert(typeof cre_no)
+					$("#cre_content").val(data[idx].cre_content);
+					$("#mc_id").val(data[idx].mc_id);
+					$("#cre_date").val(data[idx].cre_date);
+					
+					// 2) 리뷰글 댓글 입력하기
+					$("#btnInsertCrr").click(function(){
+						$("#cre_no").val(cre_no);
+						//console.log(cre_no)
+						var ref = $("#reF").serialize();
+						$.ajax("/bossInsertCampinReviewRe.do",{data:ref, success:function(r){
+							alert(r)
+						}})//end ajax
+					});//end btnInsertCrr
+										
+				  })//end clickTR
+					
+				$("#bossCreTB").append(tr);  
+							
+			});//end each
+			
+		})//end 리뷰관리 목록
+		
+		// 댓글 삭제
+		$("#deleteCreRe").click(function(){
+			
+		})//end delete
+		
+	}); //end function
+</script>
+</head>
+<body>
+	<h2>리뷰 관리 현황</h2>
+	<div id="bossReviewList">
+		<table id="bossCreTB" border="1">
+			<tr>
+				<th>번호</th>
+				<th>아이디</th>
+				<th>리뷰글내용</th>
+				<th>별점</th>
+				<th>리뷰등록일</th>
+				<th>댓글현황</th>
+				<th>댓글내용</th>
+			</tr>
+		</table>
+		<input type="hidden" id="cre_re_no">
+	</div>
+	<br>
+	<div id="insertCreRe">
+		
+		리뷰글 내용 : <br>
+				<textarea rows="5" cols="70" id="cre_content" name="cre_content"></textarea>
+				<br>
+		작성자 : <input type="text" id="mc_id" name="mc_id">
+		등록일 : <input type="text" id="cre_date" name="cre_date"><br>
+	<br>
+		<form id="reF">
+		리뷰 댓글 : <br>
+				<textarea rows="5" cols="70" id="cre_re_contents" name="cre_re_contents"></textarea>
+				<input type="hidden" id="mb_id" name="mb_id" value="test5678">
+				<input type="hidden" id="cre_no" name="cre_no">
+				<input type="hidden" id="cre_re_no" name="cre_re_no">
+		</form>
+		<button id="btnInsertCrr">등록</button>
+	</div>
+
+</body>
+</html>

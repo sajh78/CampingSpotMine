@@ -4,9 +4,34 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reservation">
 
+	<!-- (사업자용) 전체 예약관리 목록 -->
 	<select id="bossReservationList" resultType="bossRVo">
 		select cr.cr_name, r_no, mc_name, mc_tel, r_date, r_checkin, r_price, r_revstatus, r_cancel
 		from camping_room cr, reservation r, member_customer mc where cr.cr_no = r.cr_no and r.mc_id = mc.mc_id and cs_no=100 order by r_no
 	</select>
+	
+	<!-- 사업자 예약승인 -->
+	<update id="updateRstatus">
+		update reservation set r_revstatus = 1 where r_no = #{r_no}
+	</update>
+	
+	<!-- 사업자 취소승인 -->
+	<update id="updateCstatus">
+		update reservation set r_cancel = 2 where r_no = #{r_no}
+	</update>
+	
+	<!-- (사업자) 예약달력 리스트 -->
+	<select id="listCalendar" resultType="rsvo">
+		select count(*) from reserve_search where rs_date= #{rs_date} and cr_no = #{cr_no} 
+	</select>
+	
+	
+	<!-- (사업자용) 예약 상세정보 => 안씀..-->
+	<select id="getBossReservationList" resultType="bossRVo">
+		select cr.cr_name, r_no, mc_name, mc_tel, r_date, r_checkin, r_price, r_revstatus, r_cancel
+		from camping_room cr, reservation r, member_customer mc
+		where cr.cr_no = r.cr_no and r.mc_id = mc.mc_id and cs_no=100 and r_no = #{r_no}; 
+	</select>
+	
 
 </mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CampingReview">
+  
+  <!-- (사업자용) 리뷰 관리 목록 -->
+  <select id="bossCampingReviewList" resultType="creVo">
+   	select * from camping_review where mc_id in (select mc_id from reservation) and cs_no=100
+  </select>
+  
+  <!-- (사업자) 댓글 등록하기 -->
+  <insert id="insertCreRe">
+  	insert into camping_review_re values(#{cre_re_no}, #{cre_no}, #{mb_id}, #{cre_re_contents})
+  </insert>
+  
+  <!-- (사업자) 댓글 삭제하기 -->
+  <delete id="deleteCreRe">
+  	delete camping_review_re where cre_re_no = #{cre_re_no}
+  </delete>
+  
+  <!-- (사업자) 댓글 번호 메소드 -->
+   <select id="nextNo" resultType="java.lang.Integer">
+  	select nvl(max(cre_re_no),0)+1 from camping_review_re
+  </select>
+  
+  <!-- (사업자) 댓글 전체 목록  -->
+  <select id="bossCRRList" resultType="crrVo">
+  	select * from camping_review_re
+  </select>
+  
+  <!-- 캠핑리뷰 댓글 확인 -->
+  <select id="countRepleAtReview" resultType="crrVo">
+  	select cre_re_no from camping_review_re where cre_no =#{cre_no}
+  </select>
+  
+  
+</mapper>

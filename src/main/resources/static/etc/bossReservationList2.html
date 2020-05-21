@@ -6,6 +6,17 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 	$(function(){
+
+		
+		
+		// 예약승인 업데이트 함수
+		function updateReserveStatus(){
+			$.ajax("/updateReserveStatus.do",{data:{"r_no":r_no}, success:function(r){
+				alert(r);
+			}})//end 업데이트
+		}//end 업데이트 함수
+		
+		
 		
 		// 예약 관리 현황 목록보기
 		$.getJSON("/bossReservationList.do",function(data){
@@ -13,8 +24,6 @@
 				
 				//console.log(br.r_revstatus)
 				//console.log(br.r_cancel)
-				//console.log(br.r_no)
-				var Rno = br.r_no;
 				
 				var tr = $("<tr></tr>");
 				var r_no = $("<td></td>").html(br.r_no);
@@ -29,14 +38,14 @@
 				if (r_revstatus == 1 ){
 					r_revstatus = $("<td></td>").html("예약완료");
 				} else {
-					r_revstatus = $("<td></td>").html("예약대기").css("color", "blue");
+					r_revstatus = $("<td></td>").html("예약대기");
 				}
 				
 				var r_cancel = br.r_cancel;
 				if(r_cancel == 0 ){
 					r_cancel = $("<td></td>").html("");
 				}else if(r_cancel == 1){
-					r_cancel = $("<td></td>").html("취소대기").css("color", "blue");
+					r_cancel = $("<td></td>").html("취소대기");
 				}else if(r_cancel == 2){
 					r_cancel = $("<td></td>").html("취소완료");
 				}
@@ -49,62 +58,19 @@
 				
 				// 예약승인버튼
 				var rAppv = $("<td></td>");
-				var rbtn = $("<button id='btnR'></button>").html("예약승인");
+				var rbtn = $("<button id='btnA'></button>").html("예약승인");
 				$(rAppv).append(rbtn);
 			
 				// 취소승인버튼
 				var cAppv = $("<td></td>");
-				var cbtn = $("<button id='btnC'></button>").html("취소승인");
+				var cbtn = $("<button id='btnA'></button>").html("취소승인");
 				$(cAppv).append(cbtn);
 				
 				$(tr).append(r_no,mc_name,mc_tel,cr_name,r_date,r_checkin,r_price,r_revstatus,r_cancel,rAppv,cAppv);
 				
-				// 예약승인 업데이트 동작
-				$(rbtn).click(function(){
-					//alert(revstatus)
-					//alert(typeof revstatus)
-					
-					//console.log("예약번호:" + rno);
-					//console.log("예약자명:" + mc_name);
-					//console.log("캠핑룸명:" + cr_name);
-					//console.log("요금:" + r_price)
-					
-					var rno = br.r_no;
-					var mc_name = br.mc_name;
-					var cr_name = br.cr_name;
-					var r_price = br.r_price;
-									
-					// 예약확인 팝업창
-					var resultR = confirm("예약번호: " + rno+"\n"+"예약자명: " + mc_name+"\n"+"캠핑룸명: " + cr_name+"\n"+"요금: " + r_price+"원"+"\n"+"\n"+"정말 예약 승인하시겠습니까?")
-					if(resultR){
-						$.ajax("/updateReserveStatus.do",{data:{"r_no":rno}, success:function(r){
-							alert(r);
-							window.location.href="bossReservationList.html";
-					}})//end 예약 업데이트 
-					}else{
-						return false;
-					}
-				})//end 예약확인버튼 click
+				/* // 클릭한 값 가져오기
+				$(tr).click(function(){}); */
 				
-				// 취소승인 업데이트 동작
-				$(cbtn).click(function(){
-					
-					var rno = br.r_no;
-					var mc_name = br.mc_name;
-					var cr_name = br.cr_name;
-					var r_price = br.r_price;
-					
-					// 예약확인 팝업창
-					var resultR = confirm("예약번호: " + rno+"\n"+"예약자명: " + mc_name+"\n"+"캠핑룸명: " + cr_name+"\n"+"요금: " + r_price+"원"+"\n"+"\n"+"정말 취소 승인하시겠습니까?")
-					if(resultR){
-						$.ajax("/updateCancelStatus.do",{data:{"r_no":rno}, success:function(r){
-							alert(r);
-							window.location.href="bossReservationList.html";
-						}})//end 취소 업데이트 
-					}else{
-						return false;
-					}
-				})//end 취소버튼 click
 				
 				$("#rTB").append(tr);
 				
@@ -133,7 +99,7 @@
 				<th>결제요금</th>
 				<th>예약상태</th>
 				<th>취소상태</th> 
-				<th colspan="2">예약/취소 확인</th>
+				<th colspan="2"></th>
 			</tr>
 		</table>
 	</div>

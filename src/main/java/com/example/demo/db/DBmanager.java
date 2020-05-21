@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.example.demo.vo.BossReservationVo;
+import com.example.demo.vo.CampingReviewReVo;
+import com.example.demo.vo.CampingReviewVo;
 import com.example.demo.vo.CampingRoomVo;
 import com.example.demo.vo.CampingSpotVo;
 
@@ -24,6 +26,90 @@ public class DBmanager {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	// (사업자) 예약정보 상세 => 사용안함
+	public static BossReservationVo getBossReservationList(int r_no) {
+		SqlSession session = factory.openSession();
+		BossReservationVo bossRvo = session.selectOne("reservation.getBossReservationList", r_no);
+		session.close();
+		return bossRvo;
+	}
+	
+	// 15) (사업자) 취소승인
+	public static int updateCancelStatus(int r_no) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		re = session.update("reservation.updateCstatus", r_no);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	// 14) (사업자) 예약승인
+	public static int updateReserveStatus(int r_no) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		re = session.update("reservation.updateRstatus", r_no);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	// 13) (사업자) 캠핑 리뷰 댓글 확인
+	public static CampingReviewReVo checkReviewRe(int cre_no) {
+		CampingReviewReVo crrVo = null;
+		SqlSession session = factory.openSession();
+		crrVo = session.selectOne("CampingReview.countRepleAtReview", cre_no);
+		session.close();
+		return crrVo;
+	}
+	
+	// 12) 캠핑 리뷰 댓글 삭제
+	public static int bossDeleteCampingReviewRe(int cre_re_no) {
+		int re = -1;
+		SqlSession session = factory.openSession();
+		re = session.insert("CampingReview.deleteCreRe", cre_re_no);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	// 11) 캠핑 리뷰 댓글 list
+	public static List<CampingReviewReVo> bossCRRList(){
+		List<CampingReviewReVo> crrList = null;
+		SqlSession session = factory.openSession();
+		crrList = session.selectList("CampingReview.bossCRRList");
+		session.close();
+		return crrList;
+	}
+	
+	// 10) 캠핑 리뷰 답글 번호
+	public static int nextNo() {
+		int cre_re_no =0;
+		SqlSession session = factory.openSession();
+		cre_re_no = session.selectOne("CampingReview.nextNo");
+		session.close();
+		return cre_re_no;
+	}
+	
+	// 9) (사업자) 리뷰 댓글 등록 메소드
+	public static int bossInsertCampingReviewRe(CampingReviewReVo crrVo) {
+		int re = -1;			
+		SqlSession session = factory.openSession();
+		re = session.insert("CampingReview.insertCreRe", crrVo);
+		session.commit();
+		session.close();
+		return re;
+	}
+	
+	// 8) (사업자) 리뷰 관리 메소드
+	public static List<CampingReviewVo> bossCampingReviewList(){
+		List<CampingReviewVo> creList = null;
+		SqlSession session = factory.openSession();
+		creList = session.selectList("CampingReview.bossCampingReviewList");
+		session.close();
+		return creList;
 	}
 	
 	// 7) (사업자) 예약 관리 현황 메소드

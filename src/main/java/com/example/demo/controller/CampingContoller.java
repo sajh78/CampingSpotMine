@@ -35,7 +35,7 @@ public class CampingContoller {
 		if(re > 0) {
 			str = "캠핑룸 삭제를 성공하였습니다.";
 		}
-		System.out.println("캠핑룸 삭제 re:" + re);
+		//System.out.println("캠핑룸 삭제 re:" + re);
 		return str;
 	}
 

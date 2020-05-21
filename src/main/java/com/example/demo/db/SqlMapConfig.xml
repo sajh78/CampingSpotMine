@@ -8,6 +8,10 @@
     <typeAlias type="com.example.demo.vo.CampingSpotVo" alias="csVo"/>
   	<typeAlias type="com.example.demo.vo.CampingRoomVo" alias="crVo"/>
   	<typeAlias type="com.example.demo.vo.BossReservationVo" alias="bossRVo"/>
+  	<typeAlias type="com.example.demo.vo.ReservationVo" alias="rVo"/>
+  	<typeAlias type="com.example.demo.vo.CampingReviewVo" alias="creVo"/>
+  	<typeAlias type="com.example.demo.vo.CampingReviewReVo" alias="crrVo"/>
+  	<typeAlias type="com.example.demo.vo.ReserveSearchVo" alias="rsvo"/>
   </typeAliases>
   <environments default="development">
     <environment id="development">
@@ -24,5 +28,6 @@
   	<mapper resource="com/example/demo/db/CampingSpotMapper.xml"/>
     <mapper resource="com/example/demo/db/CampingRoomMapper.xml"/>
     <mapper resource="com/example/demo/db/ReservationMapper.xml"/>
+    <mapper resource="com/example/demo/db/CampingReviewMapper.xml"/>
   </mappers>
 </configuration>

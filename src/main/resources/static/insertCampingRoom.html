@@ -49,6 +49,7 @@
 		$("#crInsert").click(function(){
 			$("#i_cs_no").val(cs_no);
 			var cr = $("#insertF").serialize();
+			alert(cr)
 			$.ajax("/insertCampingRoom.do",{data:cr, success:function(r){
 				alert(r);
 				listCampingRoom();
