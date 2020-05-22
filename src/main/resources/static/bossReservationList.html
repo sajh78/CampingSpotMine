@@ -3,12 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style type="text/css">
+hr{
+  border-top: 1px solid green;
+}
+.div{
+	float: left;
+}
+.line {
+  border-left: 2px solid green;
+  height: 700px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+li a:hover:not(.active) {
+/*  background-color: #555;*/
+  background-color: pink;
+  color: white;
+}
+.rList{
+	margin-top : 10px;
+	margin-left: 30px;
+}
+</style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 	$(function(){
 		
+		var cs_no = Number(location.search.substring(location.search.indexOf("=")+1));
+		//alert(cs_no)
+		
+		// 각 페이지별 이동
+		$("#bossBpage").attr("href", "myBusinessPage.html?cs_no="+cs_no);
+		$("#bossRList").attr("href", "bossReservationList.html?cs_no="+cs_no);
+		$("#bossInsertCS").attr("href", "insertCampingSpot.html?cs_no="+cs_no);
+		$("#bossInsertCR").attr("href", "insertCampingRoom.html?cs_no="+cs_no);
+		$("#bossReviewList").attr("href", "bossReviewManage.html?cs_no="+cs_no);
+		$("#bossSales").attr("href", "salesManage.html?cs_no="+cs_no);
+		
+		
 		// 예약 관리 현황 목록보기
-		$.getJSON("/bossReservationList.do",function(data){
+		//$.getJSON("/bossReservationList.do",function(data){
+		$.ajax("/bossReservationList.do",{data:{"cs_no":cs_no},success:function(data){
 			$.each(data, function(idx, br){
 				
 				//console.log(br.r_revstatus)
@@ -111,17 +164,28 @@
 				
 			});//end each
 			
-		});//end getJSON
+		}});//end ajax rList
 		
 		
 	});//end function
 </script>
 </head>
 <body>
-	<h2>캠핑장 예약 현황</h2>
+	<h1>전체 예약 현황</h1>
 	<hr>
-	<br>
-	<div id="rList">
+	<div class="div Categori">
+		<ul>
+			 <li><a class="active" id="bossBpage">캠핑장관리</a></li>
+			 <li><a id="bossRList">전체예약현황</a></li>
+			 <li><a id="bossInsertCS">캠핑장등록</a></li>
+			 <li><a id="bossInsertCR">캠핑룸등록</a></li>
+		  	 <li><a id="bossReviewList">리뷰관리</a></li>
+			 <li><a id="bossSales">매출관리</a></li>
+		</ul>
+	</div>
+	<div class="div line"></div>
+	
+	<div class="div rList">
 		<table id="rTB" border="1">
 			<tr>
 				<th>예약번호</th>

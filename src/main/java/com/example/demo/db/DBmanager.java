@@ -1,6 +1,7 @@
 package com.example.demo.db;
 
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -13,6 +14,7 @@ import com.example.demo.vo.CampingReviewReVo;
 import com.example.demo.vo.CampingReviewVo;
 import com.example.demo.vo.CampingRoomVo;
 import com.example.demo.vo.CampingSpotVo;
+import com.example.demo.vo.ReserveSearchVo;
 
 
 public class DBmanager {
@@ -28,12 +30,13 @@ public class DBmanager {
 		}
 	}
 	
-	// (사업자) 예약정보 상세 => 사용안함
-	public static BossReservationVo getBossReservationList(int r_no) {
+	
+	// 16) (사업자) 예약 달력 목록
+	public static List<ReserveSearchVo> listCalendar(HashMap map) {
+		List<ReserveSearchVo> rsList = null;
 		SqlSession session = factory.openSession();
-		BossReservationVo bossRvo = session.selectOne("reservation.getBossReservationList", r_no);
-		session.close();
-		return bossRvo;
+		rsList = session.selectList("", "");
+		return rsList;
 	}
 	
 	// 15) (사업자) 취소승인
@@ -113,10 +116,10 @@ public class DBmanager {
 	}
 	
 	// 7) (사업자) 예약 관리 현황 메소드
-	public static List<BossReservationVo> bossReservationList(){
+	public static List<BossReservationVo> bossReservationList(int cs_no){
 		List<BossReservationVo> bossRList = null;
 		SqlSession session = factory.openSession();
-		bossRList = session.selectList("reservation.bossReservationList");
+		bossRList = session.selectList("reservation.bossReservationList", cs_no);
 		session.close();
 		return bossRList;
  	}
@@ -152,23 +155,22 @@ public class DBmanager {
 	}
 	
 	// 3) (사업자) 캠핑룸 목록 메소드
-	public static List<CampingRoomVo> bossCampingRoomList(){
+	public static List<CampingRoomVo> bossCampingRoomList(int cs_no){
 		List<CampingRoomVo> crList = null;
 		SqlSession session = factory.openSession();
-		crList = session.selectList("campingRoom.listCampingRoom");
+		crList = session.selectList("campingRoom.listCampingRoom", cs_no);
 		session.close();
 		return crList;
  	}
 	
-	// 2) (사업자) 캠핑장 목록 메소드
-	public static List<CampingSpotVo> bossCampingSpotList(){
-		List<CampingSpotVo> csList = null;
+	// 2) (사업자) 캠핑장 정보 상세 
+	public static CampingSpotVo bossGetCampingSpot(int cs_no) {
 		SqlSession session = factory.openSession();
-		csList = session.selectList("campingSpot.bossCampingSpotList");
+		CampingSpotVo csVo = session.selectOne("campingSpot.bossGetCampingSpot", cs_no);
 		session.close();
-		return csList;
- 	}
-
+		return csVo;
+	}
+	
 	// 1) (사업자) 캠핑장 등록 메소드
 	public static int insertCampingSpot(CampingSpotVo csvo) {
 		int re = -1;
@@ -177,6 +179,22 @@ public class DBmanager {
 		session.commit();
 		session.close();
 		return re;	
+	}	
+	
+	// (사업자) 예약정보 상세 => 사용안함
+	public static BossReservationVo getBossReservationList(int r_no) {
+		SqlSession session = factory.openSession();
+		BossReservationVo bossRvo = session.selectOne("reservation.getBossReservationList", r_no);
+		session.close();
+		return bossRvo;
 	}
 	
+	// (사업자) 캠핑장 목록 => 사용안함 xxx
+	public static List<CampingSpotVo> bossCampingSpotList(){
+		List<CampingSpotVo> csList = null;
+		SqlSession session = factory.openSession();
+		csList = session.selectList("campingSpot.bossCampingSpotList");
+		session.close();
+		return csList;
+ 	}
 }

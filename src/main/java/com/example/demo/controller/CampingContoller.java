@@ -61,21 +61,21 @@ public class CampingContoller {
 	
 	// 3) (사업자) 캠핑룸 목록보기
 	@RequestMapping(value = "/bossCampingRoomList.do", produces = "application/json;charset=UTF-8")
-	public String bossCampingRoomList() {
+	public String bossCampingRoomList(int cs_no) {
 		String str ="";
-		List<CampingRoomVo> crList = cDao.bossCampingRoomList();
+		List<CampingRoomVo> crList = cDao.bossCampingRoomList(cs_no);
 		Gson gson = new Gson();
 		str = gson.toJson(crList);
 		return str;
 	}
 	
-	// 2) (사업자) 캠핑장 목록보기
-	@RequestMapping(value = "/bossCampingSpotList.do", produces = "application/json;charset=UTF-8")
-	public String bossCampingSpotList() {
-		String str ="";
-		List<CampingSpotVo> csList = cDao.bossCampingSpotList();
+	// 2) (사업자) 캠핑장 상세보기
+	@RequestMapping(value = "/bossGetCampingSpot.do", produces = "application/json;charset=UTF-8")
+	public String bossGetCampingSpot(int cs_no) {
+		String str = "";
+		CampingSpotVo csVo = cDao.bossGetCampingSpot(cs_no);
 		Gson gson = new Gson();
-		str = gson.toJson(csList);
+		str = gson.toJson(csVo);
 		return str;
 	}
 	
@@ -162,4 +162,13 @@ public class CampingContoller {
 		return str;
 	}
 	
+	// (사업자) 캠핑장 목록보기 => 사용안함 xxx
+	@RequestMapping(value = "/bossCampingSpotList.do", produces = "application/json;charset=UTF-8")
+	public String bossCampingSpotList() {
+		String str ="";
+		List<CampingSpotVo> csList = cDao.bossCampingSpotList();
+		Gson gson = new Gson();
+		str = gson.toJson(csList);
+		return str;
+	}
 }

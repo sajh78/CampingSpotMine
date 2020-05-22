@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+hr{
+  border-top: 1px solid green;
+}
+.div{
+	float: left;
+	display: inline-block;
+}
+.mainImg{
+	margin-left: 50px;
+	margin-top: 10px;
+}
+.main{
+	margin-left: 100px;
+	margin-top: 70px;
+}
+.line {
+  border-left: 2px solid green;
+  height: 700px;
+  margin-right: 30px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+li a:hover:not(.active) {
+/*  background-color: #555;*/
+  background-color: pink;
+  color: white;
+}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		var cs_no = Number(location.search.substring(location.search.indexOf("=")+1));
+		
+		// 각 페이지별 이동
+		$("#bossBpage").attr("href", "myBusinessPage.html?cs_no="+cs_no);
+		$("#bossRList").attr("href", "bossReservationList.html?cs_no="+cs_no);
+		$("#bossInsertCS").attr("href", "insertCampingSpot.html?cs_no="+cs_no);
+		$("#bossInsertCR").attr("href", "insertCampingRoom.html?cs_no="+cs_no);
+		$("#bossReviewList").attr("href", "bossReviewManage.html?cs_no="+cs_no);
+		$("#bossSales").attr("href", "salesManage.html?cs_no="+cs_no);
+		
+		var month = $("#month option:selected").val();
+		alert(month)
+		
+		
+		
+	})//end function
+</script>
+</head>
+<body>
+	<h1>매출관리현황</h1>
+	<hr>
+	<div class="div Categori">
+		<ul>
+		  <li><a class="active" id="bossBpage">캠핑장관리</a></li>
+		  <li><a id="bossRList">전체예약현황</a></li>
+		  <li><a id="bossInsertCS">캠핑장등록</a></li>
+		  <li><a id="bossInsertCR">캠핑룸등록</a></li>
+		  <li><a id="bossReviewList">리뷰관리</a></li>
+		  <li><a id="bossSales">매출관리</a></li>
+		</ul>
+	</div>
+	<div class="div line"></div>
+	
+	<div class="div s">
+		<h2>월별 매출 현황</h2>
+		<select id="month" name="month">
+			<option value="1">1월</option>
+			<option value="2">2월</option>
+			<option value="3">3월</option>
+			<option value="4">4월</option>
+			<option value="5">5월</option>
+			<option value="6">6월</option>
+			<option value="7">7월</option>
+			<option value="8">8월</option>
+			<option value="9">9월</option>
+			<option value="10">10월</option>
+			<option value="11">11월</option>
+			<option value="12">12월</option>
+		</select>
+		<hr>
+		<table id="tbS" border="1">
+			<tr>
+				<th>번호</th>
+				<th>캠핑룸명</th>
+				<th>정상요금</th>
+				<th>성수기요금</th>
+				<th>정상요금 총합</th>
+				<th>성수기요금 총합</th>
+				<th>결제요금 총합</th>
+				<th>취소금액 총합</th>
+				<th>캠핑스팟 수수료</th>
+				<th>순이익</th>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

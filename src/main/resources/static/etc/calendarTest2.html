@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+<body onload="onload_fn();" >
+
+<script type="text/javascript">
+
+var year=document.getElementById("select_year").innerHTML;
+  var month=document.getElementById("select_month").innerHTML;
+  var date= date.innerHTML;
+
+function onload_fn(){
+    calendar(2009,8);//임시 값
+}
+
+function getValue(date){
+  year=document.getElementById("select_year").innerHTML;
+  month=document.getElementById("select_month").innerHTML;
+  date= date.innerHTML;
+  alert('선택한 날짜 ::' + year+'년 '+month +'월 '+ date+'일 ');
+ }
+
+function calendar(year, month){
+
+     var tags="<table cellspacing='0' border='1' onclick='cal();'>";
+     tags+="<tr><th>일</th><th>월</th><th> 화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr><tr>";
+     var date = new Date();
+    date.setFullYear(year,month,1);
+
+    var day = date.getDay();//1일의 요일
+
+    for(var i =0; i<day;i++){
+         tags+='<td>.</td>';
+    }
+    while(date.getMonth()==month){
+        if(date.getDate()!=1&&date.getDay()==0){
+             tags+='</tr><tr>';
+        }
+         tags+='<td onclick="getValue(this)">'+date.getDate()+'</td>';
+        date.setDate(date.getDate()+1);
+     }
+
+     var days=date.getDay();
+
+     if(days!=0){
+         var last = 6-days+1;
+         for(var i=0;i<last;i++){
+            tags+='<td>.</td>';
+         }
+     }
+     tags+='</tr></table>';
+     var x=document.getElementById("test");
+      x.innerHTML=tags;
+ }
+
+function before_month(){
+
+    var year= window.document.getElementById("select_year");
+    var month= window.document.getElementById("select_month");
+
+    if(month.innerHTML==1){
+        month.innerHTML=12;
+        year.innerHTML= parseInt(year.innerHTML)-1;
+    }else{
+        month.innerHTML=parseInt(month.innerHTML)-1;
+    }
+
+    calendar(year.innerHTML,parseInt(month.innerHTML)-1);
+
+}
+
+function after_month(){
+
+    var year= window.document.getElementById("select_year");
+    var month= window.document.getElementById("select_month");
+
+    if(month.innerHTML==12){
+        month.innerHTML=1;
+        year.innerHTML=parseInt(year.innerHTML)+1;
+    }else{
+        month.innerHTML=parseInt(month.innerHTML)+1;
+    }
+    calendar(year.innerHTML,parseInt(month.innerHTML)-1);
+
+}
+</script>
+
+<div>
+    <span onclick="before_month();">◀</span>
+    <span id="select_year" >2009</span>년
+    <span id="select_month" >9</span> 월
+    <span onclick="after_month();" >▶</span>
+
+    <div id ='test'>
+    </div>
+</div>
+
+</body>
+</html>
+
+
+출처: https://haneulnoon.tistory.com/57 [haneulnoon's Diary]

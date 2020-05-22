@@ -28,18 +28,23 @@ public class CampingDao {
 	}
 	
 	// 3) (사업자) 캠핑룸 목록 dao
-	public List<CampingRoomVo> bossCampingRoomList(){
-		return DBmanager.bossCampingRoomList();
+	public List<CampingRoomVo> bossCampingRoomList(int cs_no){
+		return DBmanager.bossCampingRoomList(cs_no);
 	}
 	
-	// 3) (사업자) 캠핑장 목록 dao
-	public List<CampingSpotVo> bossCampingSpotList(){
-		return DBmanager.bossCampingSpotList();
+	// 2) (사업자) 캠핑장 상세 dao
+	public CampingSpotVo bossGetCampingSpot(int cs_no) {
+		return DBmanager.bossGetCampingSpot(cs_no);
 	}
 	
 	// 1) (사업자) 캠핑장 등록 dao
 	public int insertCampingSpot(CampingSpotVo csvo) {
 		return DBmanager.insertCampingSpot(csvo);
 	}
-
+	
+	// (사업자) 캠핑장 목록 dao => 사용안함
+	public List<CampingSpotVo> bossCampingSpotList(){
+		return DBmanager.bossCampingSpotList();
+	}
+	
 }

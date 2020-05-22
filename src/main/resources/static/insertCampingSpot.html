@@ -4,77 +4,80 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
-	
+hr{
+  border-top: 1px solid green;
+}
+.div{
+	float: left;
+}
+.cs{
+	margin-top: 10px;
+	margin-left: 30px;
+}
+.line {
+  border-left: 2px solid green;
+  height: 700px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+li a:hover:not(.active) {
+/*  background-color: #555;*/
+  background-color: pink;
+  color: white;
+}
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 	$(function(){
-				
-		// 캠핑장 목록보기 함수
-		function listCampingSpot(){
-			
-			$("#cstb").empty();
-			$("#cstb").html("<th>캠핑장명</th><th>캠핑장전화</th><th>캠핑장주소1</th><th>캠핑장주소2</th><th>캠핑장홈페이지</th><th>사업자계좌번호</th><th>글램핑수</th><th>카라반수</th><th>오토캠핑수</th><th>캠핑테마</th><th>캠핑시설</th><th>캠핑장 상세설명</th>");
-
-			$.getJSON("/bossCampingSpotList.do",function(data){
+		
+		var cs_no = Number(location.search.substring(location.search.indexOf("=")+1));
+		
+		// 각 페이지별 이동
+		$("#bossBpage").attr("href", "myBusinessPage.html?cs_no="+cs_no);
+		$("#bossRList").attr("href", "bossReservationList.html?cs_no="+cs_no);
+		$("#bossInsertCS").attr("href", "insertCampingSpot.html?cs_no="+cs_no);
+		$("#bossInsertCR").attr("href", "insertCampingRoom.html?cs_no="+cs_no);
+		$("#bossReviewList").attr("href", "bossReviewManage.html?cs_no="+cs_no);
+		$("#bossSales").attr("href", "salesManage.html?cs_no="+cs_no);
+		
+		// 캠핑장 상세보기 		
+			  $.ajax("/bossGetCampingSpot.do",{data:{"cs_no":cs_no},success:function(r){
 				//alert(data);
-				$.each(data, function(idx, cs){
 					var tr = $("<tr></tr>");
-							
-					//var cs_no = $("<td></td>").html(cs.cs_no);
-					var cs_name = $("<td></td>").html(cs.cs_name);
- 					var cs_tel = $("<td></td>").html(cs.cs_tel);
-					var cs_addr_head = $("<td></td>").html(cs.cs_addr_head);
-					var cs_addr_remain = $("<td></td>").html(cs.cs_addr_remain);
-					var cs_url = $("<td></td>").html(cs.cs_url);
-					var cs_account = $("<td></td>").html(cs.cs_account);
-					var cs_glamping_cnt = $("<td></td>").html(cs.cs_glamping_cnt);
-					var cs_caravan_cnt = $("<td></td>").html(cs.cs_caravan_cnt);
-					var cs_autocamping_cnt = $("<td></td>").html(cs.cs_autocamping_cnt);
-					var cs_theme = $("<td></td>").html(cs.cs_theme);
-					var cs_fac = $("<td></td>").html(cs.cs_fac);  
-					var cs_detail = $("<td></td>").html(cs.cs_detail);
-					//console.log(cs_fac[0]);
+					var cs_name = $("<td></td>").html(r.cs_name);
+					console.log(r.cs_name)
+					console.log(cs_name[0])
+ 					var cs_tel = $("<td></td>").html(r.cs_tel);
+					var cs_addr_head = $("<td></td>").html(r.cs_addr_head);
+					var cs_addr_remain = $("<td></td>").html(r.cs_addr_remain);
 					
-					$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain,cs_url,cs_account,cs_glamping_cnt,cs_caravan_cnt,cs_autocamping_cnt,cs_theme,cs_fac,cs_detail);
+					$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain);
 										
 					$("#cstb").append(tr);
 					
-					// 사업자등록증 이미지 업로드
-					//alert(cs.cs_camp_fname)
-					console.log(cs.cs_licence_fname)
-					//var Limg = $("<img></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
-					var Limg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":100, "height":100});
-					var imgLicence = $("#divImgLicence").append(Limg);
-					$("#divImgForm").append(imgLicence); 
-					
-					// 캠핑장 이미지 업로드
-					//alert(cs.cs_camp_fname)
-					console.log(cs.cs_camp_fname)
-					//var Cimg = $("<img></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
-					var Cimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":100, "height":100});
-					var imgCamping = $("#divImgCamping").append(Cimg);
-					$("#divImgForm").append(imgCamping); 
-					
-					// 지도 이미지 업로드
-					console.log(cs.cs_map_fname);
-					var Mimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_map_fname, "width":100, "height":100});
-					var imgMap = $("#divImgMap").append(Mimg);
-					$("#divImgForm").append(imgMap);
-										
 					// 캠핑룸등록 이동하기
 					$("#btnCR").click(function(){
-						window.location.href="insertCampingRoom.html?cs_no="+cs.cs_no;
+						window.location.href="insertCampingRoom.html?cs_no="+r.cs_no;
 					});
-				
-				}); //end each
-				
-			}); // end getJSON
-			
-		}// end list함수
-		
-		// 캠핑장 목록보기
-		listCampingSpot();
+									 
+			}}); // end ajax list	
 		
 		// 캠핑장 등록하기
 		$("#csInsert").click(function(){
@@ -104,34 +107,32 @@
 </script>
 </head>
 <body>
-	<div id="listCS">
-		<h2>캠핑장 등록</h2>
-		<table id="cstb" border="1" width="100%">
+	<h1>캠핑장 등록</h1>		
+	<hr>
+	<div class="div Categori">
+		<ul>
+		  <li><a class="active" id="bossBpage">캠핑장관리</a></li>
+		  <li><a id="bossRList">전체예약현황</a></li>
+		  <li><a id="bossInsertCS">캠핑장등록</a></li>
+		  <li><a id="bossInsertCR">캠핑룸등록</a></li>
+	  	  <li><a id="bossReviewList">리뷰관리</a></li>
+		  <li><a id="bossSales">매출관리</a></li>
+		</ul>
+	</div>
+	<div class="div line"></div>
+
+	<div class="div cs">
+		<table id="cstb" border="1">
 			<tr>
 				<th>캠핑장명</th>
 				<th>캠핑장전화</th>
 				<th>캠핑장주소1</th>
 				<th>캠핑장주소2</th>
-				<th>캠핑장홈페이지</th>
-				<th>사업자계좌번호</th>
-				<th>글램핑수</th>
-				<th>카라반수</th>
-				<th>오토캠핑수</th>
-				<th>캠핑테마</th>
-				<th>캠핑시설</th>
-				<th>캠핑장 상세설명</th>
 			</tr>
 		</table>
-		<div id="divImgForm">
-			<div id="divImgLicence"></div>
-			<div id="divImgCamping"></div>
-			<div id="divImgMap"></div>
-		</div>
 		<br>
-		<button id="btnCR">캠핑룸 등록으로 이동</button>		
-		<br>
-	</div>
-	<hr>
+		<button id="btnCR">캠핑룸 등록으로 이동</button>	
+		<hr>
 		<form id="f" method="post" enctype="multipart/form-data">
 			<table>
 				<tr>
@@ -242,6 +243,6 @@
 		</form>		
 		<button id="csInsert">캠핑장등록</button>
 		<button id="csReset">취소</button>
-
+	</div>
 </body>
 </html>

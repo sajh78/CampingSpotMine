@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dao.ReservationDao;
 import com.example.demo.vo.BossReservationVo;
+import com.example.demo.vo.ReserveSearchVo;
 import com.google.gson.Gson;
 
 @RestController
@@ -20,11 +23,17 @@ public class ReservationController {
 		this.rDao = rDao;
 	}
 	
-	// (사업자) 예약 상세정보
-	@RequestMapping(value = "/getBossReservationList.do", produces = "application/json;charset=UTF-8")
-	public BossReservationVo getBossReservationList(int r_no) {
-		BossReservationVo brvo = rDao.getBossReservationList(r_no);
-		return brvo;
+	// 4) (사업자) 예약 달력 목록
+	@RequestMapping(value = "/listCalendar.do", produces = "application/json;charset=UTF-8")
+	public String listCalendar(Date rs_date, int cr_no) {
+		String str ="";
+		HashMap map = new HashMap<>();
+		map.put("rs_date", rs_date);
+		map.put("cr_no", cr_no);
+		List<ReserveSearchVo> rsList = rDao.listCalendar(map);
+		Gson gson = new Gson();
+		str = gson.toJson(rsList);
+		return str;
 	}
 	
 	// 3) (사업자) 취소 승인 업데이트
@@ -47,12 +56,19 @@ public class ReservationController {
 	
 	// 1) (사업자) 예약 관리 현황 목록보기
 	@RequestMapping(value ="/bossReservationList.do", produces = "application/json;charset=UTF-8" )
-	public String bossReservationList() {
+	public String bossReservationList(int cs_no) {
 		String str = "";
-		List<BossReservationVo> bossRList = rDao.bossReservationList();
+		List<BossReservationVo> bossRList = rDao.bossReservationList(cs_no);
 		Gson gson = new Gson();
 		str = gson.toJson(bossRList);
 		return str;
+	}
+	
+	// (사업자) 예약 상세정보 => 사용안함 xxx
+	@RequestMapping(value = "/getBossReservationList.do", produces = "application/json;charset=UTF-8")
+	public BossReservationVo getBossReservationList(int r_no) {
+		BossReservationVo brvo = rDao.getBossReservationList(r_no);
+		return brvo;
 	}
 
 }

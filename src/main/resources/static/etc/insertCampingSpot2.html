@@ -1,0 +1,288 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+hr{
+  border-top: 1px solid green;
+}
+.div{
+	float: left;
+}
+.line {
+  border-left: 2px solid green;
+  height: 700px;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+li a:hover:not(.active) {
+/*  background-color: #555;*/
+  background-color: pink;
+  color: white;
+}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		
+		var cs_no = 100;
+				
+		// 캠핑장 목록보기 함수
+		function listCampingSpot(){
+			
+			$("#cstb").empty();
+			$("#cstb").html("<th>캠핑장명</th><th>캠핑장전화</th><th>캠핑장주소1</th><th>캠핑장주소2</th>");
+
+			//$.getJSON("/bossCampingSpotList.do",function(data){
+			  $.ajax("/bossCampingSpotList.do",{data:cs_no,success:function(data){
+				alert(data);
+				$.each(data, function(idx, cs){
+					var tr = $("<tr></tr>");
+					//var cs_no = $("<td></td>").html(cs.cs_no);
+					var cs_name = $("<td></td>").html(cs.cs_name);
+ 					var cs_tel = $("<td></td>").html(cs.cs_tel);
+					var cs_addr_head = $("<td></td>").html(cs.cs_addr_head);
+					var cs_addr_remain = $("<td></td>").html(cs.cs_addr_remain);
+/* 					var cs_url = $("<td></td>").html(cs.cs_url);
+					var cs_account = $("<td></td>").html(cs.cs_account);
+					var cs_glamping_cnt = $("<td></td>").html(cs.cs_glamping_cnt);
+					var cs_caravan_cnt = $("<td></td>").html(cs.cs_caravan_cnt);
+					var cs_autocamping_cnt = $("<td></td>").html(cs.cs_autocamping_cnt);
+					var cs_theme = $("<td></td>").html(cs.cs_theme);
+					var cs_fac = $("<td></td>").html(cs.cs_fac);  
+					var cs_detail = $("<td></td>").html(cs.cs_detail); */
+					//console.log(cs_fac[0]);
+					
+					//$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain,cs_url,cs_account,cs_glamping_cnt,cs_caravan_cnt,cs_autocamping_cnt,cs_theme,cs_fac,cs_detail);
+					$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain);
+										
+					$("#cstb").append(tr);
+					
+					// 사업자등록증 이미지 업로드
+					//alert(cs.cs_camp_fname)
+					console.log(cs.cs_licence_fname)
+					//var Limg = $("<img></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
+					var Limg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_licence_fname, "width":100, "height":100});
+					var imgLicence = $(".div ImgLicence").append(Limg);
+					$(".div ImgForm").append(imgLicence); 
+					
+					// 캠핑장 이미지 업로드
+					//alert(cs.cs_camp_fname)
+					console.log(cs.cs_camp_fname)
+					//var Cimg = $("<img></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":200, "height":200}).attr("onerror","this.style.display='none'");
+					var Cimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_camp_fname, "width":100, "height":100});
+					var imgCamping = $(".div ImgCamping").append(Cimg);
+					$(".div ImgForm").append(imgCamping); 
+					
+					// 지도 이미지 업로드
+					console.log(cs.cs_map_fname);
+					var Mimg = $("<img class='Img'></img>").attr({"src":"img/"+cs.cs_map_fname, "width":100, "height":100});
+					var imgMap = $(".div ImgMap").append(Mimg);
+					$(".div ImgForm").append(imgMap);
+										
+					// 캠핑룸등록 이동하기
+					$("#btnCR").click(function(){
+						window.location.href="insertCampingRoom.html?cs_no="+cs.cs_no;
+					});
+				
+				}); //end each
+				
+			}}); // end ajax list
+			
+		}// end list함수
+		
+		// 캠핑장 목록보기
+		listCampingSpot();
+		
+		// 캠핑장 등록하기
+		$("#csInsert").click(function(){
+			//var cs = $("#f").serializeArray();
+			
+			var cs = new FormData(document.getElementById("f"));
+			
+			//alert(cs)
+			$.ajax("/insertCampingSpot.do",{
+					data:cs,
+					processData:false,
+					contentType:false,
+					type:"POST",
+					success:function(r){
+						alert(r);
+						listCampingSpot();
+						$("#f input").val("");
+			}});
+		});
+		
+		// 취소버튼 클릭
+		$("#csReset").click(function(){
+			$("#f input").val("");
+		})
+				
+	});
+</script>
+</head>
+<body>
+	<h1>캠핑장 등록</h1>		
+	<hr>
+	<div class="div Categori">
+		<ul>
+		  <li><a class="active" href="myBusinessPage.html">캠핑장관리</a></li>
+		  <li><a href="bossReservationList.html">전체예약현황</a></li>
+		  <li><a href="insertCampingSpot.html">캠핑장 등록</a></li>
+		  <li><a href="insertCampingRoom.html">캠핑룸등록</a></li>
+		  <li><a href="bossReviewManage.html">리뷰관리</a></li>
+		  <li><a href="salesManage.html">매출관리</a></li>
+		</ul>
+	</div>
+		
+	<div class="div line"></div>
+	<div class="div listCS">
+		<table id="cstb" border="1" width="100%">
+			<tr>
+				<th>캠핑장명</th>
+				<th>캠핑장전화</th>
+				<th>캠핑장주소1</th>
+				<th>캠핑장주소2</th>
+			</tr>
+		</table>
+		<div class="div ImgForm">
+			<div class="div ImgLicence"></div>
+			<div class="div ImgCamping"></div>
+			<div class="div ImgMap"></div>
+		</div>
+		<button id="btnCR">캠핑룸 등록으로 이동</button>		
+		<br>
+	</div>
+	<br>
+	  <div class="div f">
+		<form id="f" method="post" enctype="multipart/form-data">
+			<table>
+				<tr>
+					
+				</tr>
+				<tr>
+					<th>캠핑장명</th>
+					<td><input type="text" name="cs_name" id="cs_name"></td>
+				</tr>
+				<tr>
+					<th>캠핑장전화</th>
+					<td><input type="text" name="cs_tel" id="cs_tel"></td>
+				</tr>
+				<tr>
+					<th>캠핑장주소1</th>
+					<td>
+						<select name="cs_addr_head" id="cs_addr_head">
+							<option value="서울">서울</option>
+							<option value="인천">인천</option>
+							<option value="경기도">경기도</option>
+							<option value="강원도">강원도</option>
+							<option value="충청북도">충청북도</option>
+							<option value="충청남도">충청남도</option>
+							<option value="전라북도">전라북도</option>
+							<option value="전라남도">전라남도</option>
+							<option value="경상북도">경상북도</option>
+							<option value="경상남도">경상남도</option>
+							<option value="제주도">제주도</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>캠핑장주소2</th>
+					<td><input type="text" name="cs_addr_remain" id="cs_addr_remain"></td>
+				</tr>
+				<tr>
+					<th>캠핑장 홈페이지</th>
+					<td><input type="text" name="cs_url" id="cs_url"></td>
+				</tr>
+				<tr>
+					<th>사업자 계좌번호</th>
+					<td><input type="text" name="cs_account" id="cs_account"></td>
+				</tr>
+				<tr>
+					<th>사업자등록증파일</th>
+					<td><input type="file" name="uploadFile" id="uploadFile"></td>
+				</tr>
+				<tr>
+					<th>캠핑장 사진</th>
+					<td><input type="file" name="CampingUploadFile" id="CampingUploadFile"></td>
+				</tr>
+				<tr>
+					<th>약도/ 주변시설 사진</th>
+					<td><input type="file" name="MapUploadFile" id="MapUploadFile"></td>
+				</tr>
+				<tr>
+					<th>캠핑장 위도</th>
+					<td><input type="text" name="cs_lati" id="cs_lati"></td>
+				</tr>
+				<tr>
+					<th>캠핑장 경도</th>
+					<td><input type="text" name="cs_long" id="cs_long"></td>
+				</tr>
+				<tr>
+					<th>글램핑수</th>
+					<td><input type="text" name="cs_glamping_cnt" id="cs_glamping_cnt"></td>
+				</tr>
+				<tr>
+					<th>카라반수</th>
+					<td><input type="text" name="cs_caravan_cnt" id="cs_caravan_cnt"></td>
+				</tr>
+				<tr>
+					<th>오토캠핑수</th>
+					<td><input type="text" name="cs_autocamping_cnt" id="cs_autocamping_cnt"></td>
+				</tr>
+				<tr>
+					<th>캠핑테마</th>
+					<td>
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="산">산
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="바다">바다
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="강">강
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="계곡">계곡				
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="유원지">유원지			
+						<input type="checkbox" name="cs_theme" id="cs_theme" value="섬	">섬			
+						</td>
+				</tr>
+				<tr>
+					<th>캠핑시설</th>
+					<td>
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="와이파이">와이파이
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="샤워실">샤워실
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="에어컨">에어컨
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="온수">온수 <br>	
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="전기">전기			
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="매점">매점			
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="반려동물">반려동물			
+						<input type="checkbox" name="cs_fac" id="cs_fac" value="운동시설">운동시설			
+					</td>
+				</tr>		
+				<tr>
+					<th>캠핑장 상세설명</th>
+					<td><textarea name="cs_detail" id="cs_detail" rows="5" cols="30"></textarea></td>
+				</tr>	
+				<tr>
+					<th><input type="hidden" name="mb_id" value="test5678" ></th>
+				</tr>				
+			</table>
+		</form>		
+		<button id="csInsert">캠핑장등록</button>
+		<button id="csReset">취소</button>
+	</div>
+</body>
+</html>
