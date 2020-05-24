@@ -88,7 +88,7 @@ public class CampingReviewController {
 		
 		Gson gson = new Gson();
 		str = gson.toJson(creList);
-		System.out.println(creList);
+		//System.out.println(creList);
 		return str;
 	}
 

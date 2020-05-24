@@ -11,6 +11,7 @@
   	<typeAlias type="com.example.demo.vo.ReservationVo" alias="rVo"/>
   	<typeAlias type="com.example.demo.vo.CampingReviewVo" alias="creVo"/>
   	<typeAlias type="com.example.demo.vo.CampingReviewReVo" alias="crrVo"/>
+  	<typeAlias type="com.example.demo.vo.BossListSalesVo" alias="salesVo"/>
   	<typeAlias type="com.example.demo.vo.ReserveSearchVo" alias="rsvo"/>
   </typeAliases>
   <environments default="development">

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.dao.CampingDao;
+import com.example.demo.vo.BossListSalesVo;
 import com.example.demo.vo.CampingRoomVo;
 import com.example.demo.vo.CampingSpotVo;
 import com.google.gson.Gson;
@@ -24,6 +26,72 @@ public class CampingContoller {
 	
 	public void setcDao(CampingDao cDao) {
 		this.cDao = cDao;
+	}
+	
+	// 10) (사업자) 매출 현황 챠트
+	@RequestMapping(value = "/bossChart.do", produces = "application/json;charset=UTF-8")
+	public String bossChart(int cs_no) {
+		String str = "";
+		List<BossListSalesVo> chartList = cDao.bossChart(cs_no);
+		Gson gson = new Gson();
+		str = gson.toJson(chartList);
+		return str;
+	}
+	
+	// 9) (사업자) 월별 매출 총합
+	@RequestMapping(value = "/bossListTotalMonth.do", produces = "application/json;charset=UTF-8")
+	public String bossListTotalMonth(int cs_no, String month) {
+		String str = "";
+		HashMap map = new HashMap();
+		map.put("cs_no", cs_no);
+		map.put("month", month);
+		BossListSalesVo svo = cDao.bossListTotalMonth(map);
+		Gson gson = new Gson();
+		str = gson.toJson(svo);
+		return str;
+	}
+	
+	// 8) (사업자) 캠핑물별 매출 총합 list
+	@RequestMapping(value = "/bossListTotalCampingRoom.do", produces = "application/json;charset=UTF-8")
+	public String bossListTotalCampingRoom(int cs_no, String month) {
+		String str = "";
+		HashMap map = new HashMap();
+		map.put("cs_no", cs_no);
+		map.put("month", month);
+		List<BossListSalesVo> totalList = cDao.bossListTotalCampingRoom(map);
+		Gson gson = new Gson();
+		str = gson.toJson(totalList);
+		return str;
+	}
+	
+	// 7) (사업자) 매출 현황 목록보기
+	@RequestMapping(value = "/bossListSales.do", produces = "application/json;charset=UTF-8")
+	public String bossListSales(int cs_no, String month) {
+		String str ="";
+		HashMap map = new HashMap();
+		map.put("cs_no", cs_no);
+		map.put("month", month);
+		List<BossListSalesVo> salesList = cDao.bossListSales(map);
+		
+		for(int i =0; i <salesList.size(); i++ ) {
+			BossListSalesVo svo =  salesList.get(i);
+			int r_cancel = svo.getR_cancel();
+			int r_price = svo.getR_price();
+			if(r_cancel > 0) {
+				svo.setR_cancel(r_price);
+				svo.setR_price(0);
+				svo.setComm(0);
+				svo.setMargin(0);
+				salesList.set(i, svo);
+			}else {
+				svo.setR_cancel(0);
+				salesList.set(i, svo);
+			}
+		}
+
+		Gson gson = new Gson();
+		str = gson.toJson(salesList);
+		return str;
 	}
 	
 	// 6) (사업자) 캠핑룸 삭제하기

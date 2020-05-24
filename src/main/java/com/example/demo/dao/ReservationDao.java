@@ -12,6 +12,12 @@ import com.example.demo.vo.ReserveSearchVo;
 @Repository
 public class ReservationDao {
 	
+	// 5) (사업자) 사업자페이지 메인 예약목록
+	public List<BossReservationVo> businessMyPageReservationList(int cs_no){
+		return DBmanager.businessMyPageReservationList(cs_no);
+	}
+	
+	
 	// 4) (사업자) 예약 달력보기
 	public List<ReserveSearchVo> listCalendar(HashMap map) {
 		return DBmanager.listCalendar(map);

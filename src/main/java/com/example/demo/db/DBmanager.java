@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
+import com.example.demo.vo.BossListSalesVo;
 import com.example.demo.vo.BossReservationVo;
 import com.example.demo.vo.CampingReviewReVo;
 import com.example.demo.vo.CampingReviewVo;
@@ -30,6 +31,51 @@ public class DBmanager {
 		}
 	}
 	
+	// 21) (사업자) 사업자페이지 메인 예약목록
+	public static List<BossReservationVo> businessMyPageReservationList(int cs_no) {
+		List<BossReservationVo> mpList = null;
+		SqlSession session = factory.openSession();
+		mpList = session.selectList("reservation.businessMyPageReservationList", cs_no);
+		session.close();
+		return mpList;
+	}
+	
+	
+	// 20) (사업자) 매출 현황 챠트
+	public static List<BossListSalesVo> bossChart(int cs_no){
+		List<BossListSalesVo> chartList = null;
+		SqlSession session = factory.openSession();
+		chartList = session.selectList("campingRoom.chart", cs_no);
+		session.close();
+		return chartList;
+	}
+
+	// 19) (사업자) 월별 매출 총합
+	public static BossListSalesVo bossListTotalMonth(HashMap map){
+		BossListSalesVo svo = null;
+		SqlSession session = factory.openSession();
+		svo = session.selectOne("campingRoom.totalMonth", map);
+		session.close();
+		return svo;
+	}
+	
+	// 18) (사업자) 캠핑룸별 매출 총합 list
+	public static List<BossListSalesVo> bossListTotalCampingRoom(HashMap map){
+		List<BossListSalesVo> salesList = null;
+		SqlSession session = factory.openSession();
+		salesList = session.selectList("campingRoom.totalByCR", map);
+		session.close();
+		return salesList;
+	}
+	
+	// 17) (사업자) 매출 현황 목록
+	public static List<BossListSalesVo> bossListSales(HashMap map){
+		List<BossListSalesVo> salesList = null;
+		SqlSession session = factory.openSession();
+		salesList = session.selectList("campingRoom.bossListSales", map);
+		session.close();
+		return salesList;
+	}
 	
 	// 16) (사업자) 예약 달력 목록
 	public static List<ReserveSearchVo> listCalendar(HashMap map) {

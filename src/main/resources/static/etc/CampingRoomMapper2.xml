@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="campingRoom">
+
+	<!-- (사업자) 매출현황 목록보기 -->
+	<select id="bossListSales" resultType="salesVo">
+		select cs_no, cr.cr_no, cr_name, a.r_no, a.r_checkin, a.r_price, a.r_price, a.comm, a.margin, a.r_cancel
+		from camping_room cr, (select cr_no, r_no, r_checkin, r_price, comm, (r_price - comm) margin, r_cancel  from 
+		(select cr_no,r_no, r_checkin, r_price, (r_price * 0.1) comm, r_cancel  from reservation 
+		where to_number(to_char(r_checkin, 'mm')) = #{month}) order by cr_no) a 
+		where cr.cr_no = a.cr_no and cs_no =  #{cs_no}
+	
+		select A.cr_name, tot, totPeak, totPrice, totCancel, comm, margin
+		from (select cr_name, (sum(r_price) - sum(r_price*0.1)) margin from reservation r, camping_room cr 
+		where cr.cr_no = r.cr_no and cs_no=#{cs_no} group by cr_name) A, 
+		(select cr_name, sum(cr_price) tot, sum(cr_peak_price) totPeak, sum(r_price) totPrice, sum(r_cancel) totCancel, sum(r_price*0.1) comm
+		from camping_room cr, reservation r where cr.cr_no = r.cr_no and  to_number(to_char(r_checkin, 'mm')) = #{month} group by cr_name) B
+		where A.cr_name = B.cr_name
+	</select>
+
+	<!-- (사업자) 캠핑룸 목록보기 -->
+	<select id="listCampingRoom" resultType="crVo">
+		select cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type 
+		from camping_room where cs_no = #{cs_no} order by cr_no
+	</select>
+	
+	<!-- (사업자) 캠핑룸 등록하기 -->
+	<insert id="insertCampingRoom">
+		insert into camping_room values(seq_camping_room.nextval,#{cr_name},#{cr_max},#{cr_checkin},
+		#{cr_checkout},#{cr_price},#{cr_peak_price},#{cr_type},#{cs_no})
+	</insert>
+	
+	<!-- (사업자) 캠핑룸 수정하기 -->
+	<update id="updateCampingRoom">
+		update camping_room set cr_name = #{cr_name},cr_max= #{cr_max},cr_checkin=#{cr_checkin},
+		cr_checkout= #{cr_checkout},cr_price=#{cr_price},cr_peak_price=#{cr_peak_price},cr_type=#{cr_type} 
+		where cr_no=#{cr_no} and cs_no = #{cs_no}
+	</update>
+	
+	<!-- (사업자) 캠핑룸 삭제하기 -->
+	<delete id="deleteCampingRoom">
+		delete camping_room where cr_no = #{cr_no}
+	</delete>
+	
+</mapper>

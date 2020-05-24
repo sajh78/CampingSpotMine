@@ -4,10 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reservation">
 
+	 <!--  (사업자용) 사업자페이지 메인 예약 목록 -->
+	<select id="businessMyPageReservationList" resultType="bossRvo">
+		<![CDATA[select r_no, cr_no, cr_name, mc_name, mc_tel, r_date, r_price, r_revstatus, r_cancel 
+		from member_customer mc,(select r_no, cr_no, cr_name, mc_id,  r_date, r_price, r_revstatus, r_cancel from 
+		(select r_no, cs_no, r.cr_no, cr_name, mc_id,  r_date, r_price, r_revstatus, r_cancel  from reservation r, camping_room cr 
+		where r.cr_no = cr.cr_no and cs_no=#{cs_no} order by r_date desc) where rownum <= 3) a 
+		where mc.mc_id = a.mc_id order by r_date desc]]>
+	</select>
+
 	<!-- (사업자용) 전체 예약관리 목록 -->
 	<select id="bossReservationList" resultType="bossRVo">
 		select cr.cr_name, r_no, mc_name, mc_tel, r_date, r_checkin, r_price, r_revstatus, r_cancel
-		from camping_room cr, reservation r, member_customer mc where cr.cr_no = r.cr_no and r.mc_id = mc.mc_id and cs_no=#{cs_no} order by r_no
+		from camping_room cr, reservation r, member_customer mc where cr.cr_no = r.cr_no and r.mc_id = mc.mc_id 
+		and cs_no=#{cs_no} order by r_no
 	</select>
 	
 	<!-- 사업자 예약승인 -->
@@ -32,6 +42,5 @@
 		from camping_room cr, reservation r, member_customer mc
 		where cr.cr_no = r.cr_no and r.mc_id = mc.mc_id and cs_no=100 and r_no = #{r_no}; 
 	</select>
-	
 
 </mapper>

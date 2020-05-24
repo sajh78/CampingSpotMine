@@ -23,6 +23,16 @@ public class ReservationController {
 		this.rDao = rDao;
 	}
 	
+	// 5) (사업자) 사업자페이지 메인 예약목록
+	@RequestMapping(value ="/businessMyPageReservationList.do", produces = "application/json;charset=UTF-8")
+	public String businessMyPageReservationList(int cs_no) {
+		String str = "";
+		List<BossReservationVo> mpList = rDao.businessMyPageReservationList(cs_no);
+		Gson gson = new Gson();
+		str = gson.toJson(mpList);
+		return str;
+	} 
+	
 	// 4) (사업자) 예약 달력 목록
 	@RequestMapping(value = "/listCalendar.do", produces = "application/json;charset=UTF-8")
 	public String listCalendar(Date rs_date, int cr_no) {
