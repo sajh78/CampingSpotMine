@@ -35,6 +35,9 @@ table.calendar td{
 	    var $tdSche = null;
 	    var jsonData = null;
 	    
+	    var cs_no = 100
+	    var rs_date = 
+	    
 	    $(document).ready(function() {
 	        drawCalendar();
 	        initDate();
@@ -51,6 +54,10 @@ table.calendar td{
 	        var setTableHTML = "";
 	        setTableHTML+='<table class="calendar">';
 	        setTableHTML+='<tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>';
+	        
+/* 	        $.ajax("/bossListCalendarPS.do",{data:, success:function(){
+	        	
+	        }})//end ajax */
 	        for(var i=0;i<6;i++){
 	            setTableHTML +='<tr height="100">'; //tr
 	            
@@ -67,13 +74,6 @@ table.calendar td{
 	             	// 캠핑룸 이름 넣기
 	                /* setTableHTML +='자바룸1<br>'; 
 	                setTableHTML +='자바룸2';  */
-	                
-	                var date = new Date();
-	                var d = data.getyear();
-	                
-	                $.ajax("/bossListCalendarPS.do",{data, success:function(){
-	                	
-	                }})//end ajax
 	                
 	                setTableHTML +='</td>';
 	            }
@@ -183,23 +183,16 @@ table.calendar td{
 	                txt = jsonData[year][month];
 	                if(txt){
 	                    txt = jsonData[year][month][i];
+	                    alert(txt)
 	                    dateMatch = firstDay.getDay() + i -1; 
+	                    alert(dataMatch)
 	                    $tdSche.eq(dateMatch).text(txt);
 	                }
 	            }
 	        }
 	    }
 	     
-		  // 일별 캠핑룸 나타내기 함수
-		  function campingRoom(){
-			  var cr_name = ["자바룸1", "자바룸2", "자바룸3"];
-			  var ul = $("<ul></ul>");
-			  var li1 = $("<li><li>").html(cr_name[0]);
-			  var li2 = $("<li><li>").html(cr_name[1]);
-			  var li3 = $("<li><li>").html(cr_name[2]);
-			  console.log(li1[0])
-			  $("#div").append(ul).append(li1[0], li2[0], li3[0]);
-		  }
+
 	     
 		
 

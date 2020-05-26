@@ -42,8 +42,19 @@ li a:hover:not(.active) {
 	margin-top : 10px;
 	margin-left: 30px;
 }
+.cal{
+	margin-top : 30px;
+	margin-left: 200px;
+}
 </style>
+<link rel="stylesheet" href="/packages/core/main.css">
+<link rel="stylesheet" href="/packages/daygrid/main.css">
+<link rel="stylesheet" href="/packages/timegrid/main.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/packages/moment/main.js"></script>
+<script type="text/javascript" src="/packages/core/main.js"></script>
+<script type="text/javascript" src="/packages/daygrid/main.min.js"></script>
+<script type="text/javascript" src="/packages/timegrid/main.js"></script>
 <script type="text/javascript">
 	$(function(){
 		
@@ -174,9 +185,18 @@ li a:hover:not(.active) {
 		}});//end ajax 예약 관리 현황 목록
 		
 		
-		
-		
 	});//end function
+	
+	document.addEventListener('DOMContentLoaded', function() {
+	    var calendarEl = document.getElementById('calendar');
+
+	    var calendar = new FullCalendar.Calendar(calendarEl, {
+	      plugins: [ 'dayGrid' ,'timeGrid']
+	    });
+
+	    calendar.render();
+	    
+	  });
 </script>
 </head>
 <body>
@@ -211,6 +231,9 @@ li a:hover:not(.active) {
 				<th colspan="2">예약/취소 확인</th>
 			</tr>
 		</table>
+	</div>
+	<div class="div cal">
+	<div id='calendar' style="width: 700px;, height: 500px;"></div>
 	</div>
 </body>
 </html>

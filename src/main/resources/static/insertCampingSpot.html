@@ -57,13 +57,17 @@ li a:hover:not(.active) {
 		$("#bossReviewList").attr("href", "bossReviewManage.html?cs_no="+cs_no);
 		$("#bossSales").attr("href", "salesManage.html?cs_no="+cs_no);
 		
-		// 캠핑장 상세보기 		
+		function move(){
+			window.location.href="insertCampingRoom.html?cs_no="+cs_no;
+		}
+		
+/* 		// 캠핑장 상세보기 		
 			  $.ajax("/bossGetCampingSpot.do",{data:{"cs_no":cs_no},success:function(r){
 				//alert(data);
 					var tr = $("<tr></tr>");
 					var cs_name = $("<td></td>").html(r.cs_name);
-					console.log(r.cs_name)
-					console.log(cs_name[0])
+					//console.log(r.cs_name)
+					//console.log(cs_name[0])
  					var cs_tel = $("<td></td>").html(r.cs_tel);
 					var cs_addr_head = $("<td></td>").html(r.cs_addr_head);
 					var cs_addr_remain = $("<td></td>").html(r.cs_addr_remain);
@@ -71,13 +75,8 @@ li a:hover:not(.active) {
 					$(tr).append(cs_name,cs_tel,cs_addr_head,cs_addr_remain);
 										
 					$("#cstb").append(tr);
-					
-					// 캠핑룸등록 이동하기
-					$("#btnCR").click(function(){
-						window.location.href="insertCampingRoom.html?cs_no="+r.cs_no;
-					});
-									 
-			}}); // end ajax list	
+							 
+			}}); // end ajax list	 */
 		
 		// 캠핑장 등록하기
 		$("#csInsert").click(function(){
@@ -93,11 +92,18 @@ li a:hover:not(.active) {
 					type:"POST",
 					success:function(r){
 						alert(r);
-						listCampingSpot();
+						//listCampingSpot();
 						$("#f input").val("");
+						move();
 			}});
 		});
+			
 		
+		// 캠핑룸등록 이동하기
+		$("#btnCR").click(function(){
+			window.location.href="insertCampingRoom.html?cs_no="+r.cs_no;
+		});
+			
 		// 취소버튼 클릭
 		$("#csReset").click(function(){
 			$("#f input").val("");
@@ -174,7 +180,7 @@ li a:hover:not(.active) {
 				</tr>
 				<tr>
 					<th>캠핑장 사진</th>
-					<td><input type="file" name="CampingUploadFile" id="CampingUploadFile"></td>
+					<td><input type="file" name="CampingUploadFile" id="CampingUploadFile" multiple="multiple"></td>
 				</tr>
 				<tr>
 					<th>약도/ 주변시설 사진</th>

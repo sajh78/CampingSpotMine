@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.example.demo.dao.CampingDao;
 import com.example.demo.vo.BossListSalesVo;
@@ -149,8 +151,11 @@ public class CampingContoller {
 	}
 	
 	// 1) (사업자) 캠핑장 등록하기
+
+	//public String insertCampingSpot(CampingSpotVo csvo, HttpServletRequest request) {
 	@RequestMapping("/insertCampingSpot.do")
-	public String insertCampingSpot(CampingSpotVo csvo, HttpServletRequest request) {
+	public String insertCampingSpot(CampingSpotVo csvo, MultipartHttpServletRequest request) {		
+		
 		String str = "캠핑장 등록을 성공하였습니다.";
 		
 		//1.사업자등록증 업로드
@@ -158,13 +163,13 @@ public class CampingContoller {
 		//String path = request.getRealPath("resources/static/img");
 		String path = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
 		
-		System.out.println(path);
+		System.out.println("사업자등록증 경로:" + path);
 		MultipartFile uploadFile = csvo.getUploadFile();
 		String cs_licence_fname =""; 	// 사업자등록증 파일이름
-		
+				
 		if(uploadFile != null) {
 			cs_licence_fname = uploadFile.getOriginalFilename();
-			System.out.println("사업자등록증 오리지널 fname:" + cs_licence_fname);
+			System.out.println("사업자등록증 fname:" + cs_licence_fname);
 
 			try {
 				byte []data = uploadFile.getBytes();
@@ -179,17 +184,49 @@ public class CampingContoller {
 			}
 		}
 		
-		//2.캠핑장이미지 업로드
+		//2.캠핑장이미지 업로드 
+			
 		String Cpath = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
+		System.out.println("캠핑장이미지 경로: " +Cpath);
+
+		MultipartFile CampingUploadFile = csvo.getCampingUploadFile();
 		
-		System.out.println(Cpath);
+		// 캠핑장 파일 이름들을 넣어 둘 변수
+		String cs_camp_fnames =""; 	
+		
+		List<MultipartFile> campList = request.getFiles("CampingUploadFile");
+		for (int i=0; i <campList.size(); i++) {
+			MultipartFile multiF = campList.get(i);
+			String cs_camp_fname = multiF.getOriginalFilename();
+			cs_camp_fnames += cs_camp_fname;
+			
+			File outFile = new File(Cpath + "/" + cs_camp_fname);
+			try {
+				multiF.transferTo(outFile);
+			}catch(Exception e){
+				System.out.println(e.getMessage());
+			}
+			
+			// ,로 구분하기 위해
+			if(i < campList.size()-1) {
+				cs_camp_fnames += ",";
+			}
+		}
+		
+		csvo.setCs_camp_fname(cs_camp_fnames);
+		System.out.println(csvo.getCs_camp_fname());
+		
+		String arr[] = csvo.getCs_camp_fname().split(",");
+		System.out.println(arr);
+		
+/*// 업로드 1개만 될 때
 		MultipartFile CampingUploadFile = csvo.getCampingUploadFile();
 		String cs_camp_fname =""; 	// 캠핑장이미지 파일이름
 		
 		if(CampingUploadFile != null) {
 			
 			cs_camp_fname = CampingUploadFile.getOriginalFilename();
-			System.out.println("캠핑장 오리지널 fname:" + cs_camp_fname);
+			System.out.println("캠핑장 fname:" + cs_camp_fname);
 			
 			try {
 				byte []cdata = CampingUploadFile.getBytes();
@@ -202,17 +239,18 @@ public class CampingContoller {
 				System.out.println(e.getMessage());
 			}
 		}
+*/
 		
 		// 3.지도 이미지 업로드
 		String Mpath = "C:\\teamProject\\testCampingSpot\\src\\main\\resources\\static\\img";
-		System.out.println(Mpath);
+		System.out.println("지도이미지 경로: " + Mpath);
 		
 		MultipartFile MapUploadFile = csvo.getMapUploadFile();
 		String cs_map_fname = "";
 		
 		if(MapUploadFile != null) {
 			cs_map_fname = MapUploadFile.getOriginalFilename();
-			System.out.println("약도 오리지널 fname:" + cs_map_fname);
+			System.out.println("약도 fname:" + cs_map_fname);
 			try {
 				byte []mdata = MapUploadFile.getBytes();
 				FileOutputStream mfos = new FileOutputStream(Mpath + "/" + cs_map_fname);
@@ -225,7 +263,7 @@ public class CampingContoller {
 		}
 		
 		csvo.setCs_licence_fname(cs_licence_fname);
-		csvo.setCs_camp_fname(cs_camp_fname);
+		//csvo.setCs_camp_fname(cs_camp_fname);
 		csvo.setCs_map_fname(cs_map_fname);
 		
 		cDao.insertCampingSpot(csvo);
