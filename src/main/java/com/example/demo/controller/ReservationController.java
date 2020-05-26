@@ -23,7 +23,39 @@ public class ReservationController {
 		this.rDao = rDao;
 	}
 	
-	// 5) (사업자) 사업자페이지 메인 예약목록
+	// 6) (사업자) 달력 예약 : 예약 완료
+	@RequestMapping(value ="/bossListCalendarCP", produces = "application/json;charset=UTF-8")
+	public String bossListCalendarCP(int cs_no, Date rs_date) {
+		String str = "";
+		HashMap map = new HashMap();
+		map.put("cs_no",cs_no);
+		map.put("rs_date",rs_date);
+		
+		List<BossReservationVo> cpList = rDao.bossListCalendarCP(map);
+		
+		Gson gson = new Gson();
+		str = gson.toJson(cpList);
+		
+		return str;
+				
+	}
+	
+	// 5) (사업자) 달력 예약 : 예약가능 
+	@RequestMapping(value = "/bossListCalendarPS.do", produces = "application/json;charset=UTF-8")
+	public String bossListCalendarPS(int cs_no, Date rs_date) {
+		String str = "";
+		HashMap map = new HashMap();
+		map.put("cs_no", cs_no);
+		map.put("rs_date", rs_date);
+		
+		List<BossReservationVo> psList = rDao.bossListCalendarPS(map);
+		
+		Gson gson = new Gson();
+		str = gson.toJson(psList);
+		return str;
+	}
+	
+	// 4) (사업자) 사업자페이지 메인 예약목록
 	@RequestMapping(value ="/businessMyPageReservationList.do", produces = "application/json;charset=UTF-8")
 	public String businessMyPageReservationList(int cs_no) {
 		String str = "";
@@ -32,19 +64,6 @@ public class ReservationController {
 		str = gson.toJson(mpList);
 		return str;
 	} 
-	
-	// 4) (사업자) 예약 달력 목록
-	@RequestMapping(value = "/listCalendar.do", produces = "application/json;charset=UTF-8")
-	public String listCalendar(Date rs_date, int cr_no) {
-		String str ="";
-		HashMap map = new HashMap<>();
-		map.put("rs_date", rs_date);
-		map.put("cr_no", cr_no);
-		List<ReserveSearchVo> rsList = rDao.listCalendar(map);
-		Gson gson = new Gson();
-		str = gson.toJson(rsList);
-		return str;
-	}
 	
 	// 3) (사업자) 취소 승인 업데이트
 	@RequestMapping("/updateCancelStatus.do")
@@ -74,11 +93,27 @@ public class ReservationController {
 		return str;
 	}
 	
+
+// ================================================================================================	
+	
 	// (사업자) 예약 상세정보 => 사용안함 xxx
 	@RequestMapping(value = "/getBossReservationList.do", produces = "application/json;charset=UTF-8")
 	public BossReservationVo getBossReservationList(int r_no) {
 		BossReservationVo brvo = rDao.getBossReservationList(r_no);
 		return brvo;
+	}
+	
+	// (사업자) 예약 달력 목록  => 사용안함 xxx
+	@RequestMapping(value = "/listCalendar.do", produces = "application/json;charset=UTF-8")
+	public String listCalendar(Date rs_date, int cr_no) {
+		String str ="";
+		HashMap map = new HashMap<>();
+		map.put("rs_date", rs_date);
+		map.put("cr_no", cr_no);
+		List<ReserveSearchVo> rsList = rDao.listCalendar(map);
+		Gson gson = new Gson();
+		str = gson.toJson(rsList);
+		return str;
 	}
 
 }

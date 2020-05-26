@@ -23,4 +23,6 @@ public class BossReservationVo {
 	private int r_cancel;
 	private int cs_no;
 	
+	private Date rs_date;
+	
 }

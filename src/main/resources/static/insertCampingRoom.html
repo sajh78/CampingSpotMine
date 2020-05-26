@@ -69,13 +69,15 @@ li a:hover:not(.active) {
 		// 캠핑룸 목록 함수
 		function listCampingRoom(){
 			$("#crtb").empty();
-			$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
+			$("#crtb").html("<th>번호</th><th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
 
 //			$.getJSON("/bossCampingRoomList.do", function(data){
 			$.ajax("/bossCampingRoomList.do",{data:{"cs_no":cs_no},success:function(data){
 				//alert(data);
 				$.each(data, function(idx, cr){
 					var tr = $("<tr></tr>");
+					var no = $("<td></td").html(idx+1);
+					console.log(no)
 					var cr_no = $("<td></td>").html(cr.cr_no);
 					var cr_name = $("<td></td>").html(cr.cr_name);
 					var cr_max = $("<td></td>").html(cr.cr_max);
@@ -84,7 +86,7 @@ li a:hover:not(.active) {
 					var cr_price = $("<td></td>").html(cr.cr_price);
 					var cr_peak_price = $("<td></td>").html(cr.cr_peak_price);
 					var cr_type = $("<td></td>").html(cr.cr_type);
-					$(tr).append(cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);			
+					$(tr).append(no, cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);			
 					$("#crtb").append(tr);
 				}); //end each
 			}});// end ajax 캠핑룸목록
@@ -108,16 +110,17 @@ li a:hover:not(.active) {
 		// 3) 캠핑룸 수정하기
 		$("#crUpdate").click(function(){
 			
-			$("#h1").html("캠핑룸 수정/삭제");
+			$("h2").html("캠핑룸 수정/삭제");
 			$(".updateForm").show();
 			$(".insertForm").hide();
 			
 			$("#crtb").empty();
 			//$.getJSON("/bossCampingRoomList.do", function(data){
 			$.ajax("/bossCampingRoomList.do",{data:{"cs_no":cs_no},success:function(data){
-				$("#crtb").html("<th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
+				$("#crtb").html("<th>번호</th><th>캠핑룸번호</th><th>캠핑룸명</th><th>최대인원수</th><th>체크인시간</th><th>체크아웃시간</th><th>요금</th><th>성수기요금</th><th>캠핑룸타입</th>");
 				$.each(data, function(idx, cr){
 					var tr = $("<tr></tr>");
+					var no = $("<td></td").html(idx+1);
 					var cr_no = $("<td></td>").html(cr.cr_no);
 					var cr_name = $("<td></td>").html(cr.cr_name);
 					var cr_max = $("<td></td>").html(cr.cr_max);
@@ -127,7 +130,7 @@ li a:hover:not(.active) {
 					var cr_peak_price = $("<td></td>").html(cr.cr_peak_price);
 					var cr_type = $("<td></td>").html(cr.cr_type);
 					
-					$(tr).append(cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);
+					$(tr).append( no, cr_no, cr_name, cr_max, cr_checkin, cr_checkout, cr_price, cr_peak_price, cr_type);
 					
 						// 클릭한 내용 가져오기
 						$(tr).attr("idx", idx);
@@ -151,7 +154,8 @@ li a:hover:not(.active) {
 									var crUpdate = $("#updateF").serialize();
 										$.ajax("/updateCampingRoom.do",{data:crUpdate, success:function(r){
 											alert(r);
-											listCampingRoom();
+											window.location.href="insertCampingRoom.html?cs_no="+cs_no;
+											//listCampingRoom();
 											$(".updateForm input").val("");
 										}});//end update Ajax
 								})//end #crUpdateOK
@@ -181,7 +185,8 @@ li a:hover:not(.active) {
 </script>
 <body>
 
-		<h1 id="h1">캠핑룸 등록</h1>		
+		<!--  <h1 id="h1">캠핑룸 등록</h1>-->	
+		<h1>사업자페이지</h1>	
 		<hr>
 		<div class="div Categori">
 			<ul>
@@ -195,8 +200,10 @@ li a:hover:not(.active) {
 		</div>
 		<div class="div line"></div>
 		
+		<h2>캠핑룸 목록</h2>
 		<table id="crtb" border="2">
 			<tr>
+				<th>번호</th>
 				<th>캠핑룸번호</th>
 				<th>캠핑룸명</th>
 				<th>최대인원수</th>
@@ -208,7 +215,7 @@ li a:hover:not(.active) {
 			</tr>
 		</table>
 		<br>
-		
+		<hr>
 		<div class="div insertForm">
 			<form id="insertF" >
 				<table id="insertTb">
@@ -252,8 +259,8 @@ li a:hover:not(.active) {
 				</table>
 			</form>
 			<br>
-			<button id="crInsert">등록</button>
-			<button id="crUpdate">수정</button>
+			<button id="crInsert">캠핑룸등록</button>
+			<button id="crUpdate">캠핑룸수정</button>
 			<button id="crReset">취소</button>
 			<br>
 			</div>

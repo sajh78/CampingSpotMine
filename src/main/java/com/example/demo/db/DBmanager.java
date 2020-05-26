@@ -31,7 +31,33 @@ public class DBmanager {
 		}
 	}
 	
-	// 21) (사업자) 사업자페이지 메인 예약목록
+	// 23) (사업자) 리뷰 댓글 상세보기
+	public static CampingReviewReVo getCampingReviewRe(int cre_no) {
+		SqlSession session = factory.openSession();
+		CampingReviewReVo crrVo = session.selectOne("CampingReview.getCampingReveiwRe", cre_no);
+		session.close();
+		return crrVo;
+	}
+	
+	// 22) (사업자) 달력 예약 : 예약 완료
+	public static List<BossReservationVo> bossListCalendarCP(HashMap map){
+		List<BossReservationVo> cpList = null;
+		SqlSession session = factory.openSession();
+		cpList = session.selectList("reservation.bossListCalendarCP", map);
+		session.close();
+		return cpList;
+	}
+	
+	// 21) (사업자) 달력 예약 : 예약가능 
+	public static List<BossReservationVo> bossListCalendarPS(HashMap map){
+		List<BossReservationVo> psList = null;
+		SqlSession session = factory.openSession();
+		psList = session.selectList("reservation.bossListCalendarPS", map);
+		session.close();
+		return psList;
+	}
+	
+	// 20) (사업자) 사업자페이지 메인 예약목록
 	public static List<BossReservationVo> businessMyPageReservationList(int cs_no) {
 		List<BossReservationVo> mpList = null;
 		SqlSession session = factory.openSession();
@@ -41,7 +67,7 @@ public class DBmanager {
 	}
 	
 	
-	// 20) (사업자) 매출 현황 챠트
+	// 19) (사업자) 매출 현황 챠트
 	public static List<BossListSalesVo> bossChart(int cs_no){
 		List<BossListSalesVo> chartList = null;
 		SqlSession session = factory.openSession();
@@ -50,7 +76,7 @@ public class DBmanager {
 		return chartList;
 	}
 
-	// 19) (사업자) 월별 매출 총합
+	// 18) (사업자) 월별 매출 총합
 	public static BossListSalesVo bossListTotalMonth(HashMap map){
 		BossListSalesVo svo = null;
 		SqlSession session = factory.openSession();
@@ -59,7 +85,7 @@ public class DBmanager {
 		return svo;
 	}
 	
-	// 18) (사업자) 캠핑룸별 매출 총합 list
+	// 17) (사업자) 캠핑룸별 매출 총합 list
 	public static List<BossListSalesVo> bossListTotalCampingRoom(HashMap map){
 		List<BossListSalesVo> salesList = null;
 		SqlSession session = factory.openSession();
@@ -68,7 +94,7 @@ public class DBmanager {
 		return salesList;
 	}
 	
-	// 17) (사업자) 매출 현황 목록
+	// 16) (사업자) 매출 현황 목록
 	public static List<BossListSalesVo> bossListSales(HashMap map){
 		List<BossListSalesVo> salesList = null;
 		SqlSession session = factory.openSession();
@@ -76,15 +102,7 @@ public class DBmanager {
 		session.close();
 		return salesList;
 	}
-	
-	// 16) (사업자) 예약 달력 목록
-	public static List<ReserveSearchVo> listCalendar(HashMap map) {
-		List<ReserveSearchVo> rsList = null;
-		SqlSession session = factory.openSession();
-		rsList = session.selectList("", "");
-		return rsList;
-	}
-	
+		
 	// 15) (사업자) 취소승인
 	public static int updateCancelStatus(int r_no) {
 		int re = -1;
@@ -153,10 +171,10 @@ public class DBmanager {
 	}
 	
 	// 8) (사업자) 리뷰 관리 메소드
-	public static List<CampingReviewVo> bossCampingReviewList(){
+	public static List<CampingReviewVo> bossCampingReviewList(int cs_no){
 		List<CampingReviewVo> creList = null;
 		SqlSession session = factory.openSession();
-		creList = session.selectList("CampingReview.bossCampingReviewList");
+		creList = session.selectList("CampingReview.bossCampingReviewList",cs_no);
 		session.close();
 		return creList;
 	}
@@ -227,6 +245,8 @@ public class DBmanager {
 		return re;	
 	}	
 	
+// ================================================================================================	
+	
 	// (사업자) 예약정보 상세 => 사용안함
 	public static BossReservationVo getBossReservationList(int r_no) {
 		SqlSession session = factory.openSession();
@@ -243,4 +263,21 @@ public class DBmanager {
 		session.close();
 		return csList;
  	}
+	
+	// (사업자) 리뷰 댓글 목록보기
+	public static List<CampingReviewReVo> ListCampingReviewRe(String mb_id){
+		List<CampingReviewReVo> crrList = null;
+		SqlSession session = factory.openSession();
+		crrList = session.selectList("CampingReview.ListCRR", mb_id);
+		session.close();
+		return crrList;
+	}
+	
+	// (사업자) 예약 달력 목록
+	public static List<ReserveSearchVo> listCalendar(HashMap map) {
+		List<ReserveSearchVo> rsList = null;
+		SqlSession session = factory.openSession();
+		rsList = session.selectList("", "");
+		return rsList;
+	}
 }

@@ -21,36 +21,26 @@ public class CampingReviewController {
 		this.creDao = creDao;
 	}
 	
-	// 5) 캠핑 댓글 확인
-	@RequestMapping(value = "/bossCheckReviewRe.do", produces = "application/json;charset=UTF-8")
-	public String checkReviewRe(int cre_no) {
-		String str ="";
-		CampingReviewReVo crrVo = creDao.checkReviewRe(cre_no);
+	// 4) 댓글 상세보기
+	@RequestMapping(value = "/getCampingReviewRe.do",produces = "application/json;charset=UTF-8")
+	public String getCampingReviewRe(int cre_no) {
+		String str = "";
+		CampingReviewReVo crrVo = creDao.getCampingReviewRe(cre_no);
 		Gson gson = new Gson();
 		str = gson.toJson(crrVo);
 		return str;
 	}
-	
-	// 4) (사업자) 캠핑 리뷰 댓글 삭제
+		
+	// 3) (사업자) 캠핑 리뷰 댓글 삭제
 	@RequestMapping("/bossDeleteCampingReviewRe.do")
 	public String bossDeleteCampingReviewRe(int cre_re_no) {
 		String str = "댓글 삭제를 실패하였습니다.";
 		int re = creDao.bossDeleteCampingReviewRe(cre_re_no);
-		if ( re > 1 ) {
+		if ( re > 0) {
 			str = "댓글 삭제를 성공하였습니다.";
 			System.out.println("댓글삭제:"+re);
 		}
 		return str; 
-	}
-	
-	// 3) (사업자) 캠핑 리뷰 댓글 list
-	@RequestMapping(value = "/bossCRRList.do", produces = "application/json;charset=UTF-8")
-	public String bossCRRList() {
-		String str = "";
-		List<CampingReviewReVo> crrList = creDao.bossCRRList();
-		Gson gson = new Gson();
-		str = gson.toJson(crrList);
-		return str;
 	}
 	
 	// 2) (사업자) 캠핑 리뷰 댓글 등록
@@ -70,13 +60,13 @@ public class CampingReviewController {
 	
 	// 1) (사업자) 캠핑리뷰 관리 목록
 	@RequestMapping(value = "/bossCampingReviewList.do", produces = "application/json;charset=UTF-8")
-	public String bossCampingReviewList() {
+	public String bossCampingReviewList(int cs_no) {
 		String str = "";
-		List<CampingReviewVo> creList = creDao.bossCampingReviewList();
+		List<CampingReviewVo> creList = creDao.bossCampingReviewList(cs_no);
 		
 		// 댓글 확인 
 		for(int i=0; i<creList.size(); i++) {
-			System.out.println(creList.get(i).getRe_check());
+			//System.out.println(creList.get(i).getRe_check());
 			CampingReviewVo creVo = creList.get(i);
 			int cre_no = creVo.getCre_no();
 			CampingReviewReVo crrVo = creDao.checkReviewRe(cre_no);
@@ -91,5 +81,27 @@ public class CampingReviewController {
 		//System.out.println(creList);
 		return str;
 	}
-
+	
+/////////////////////////////////////////////////////////////////////////////
+// (사용안함)
+	
+	// 댓글 목록보기
+	@RequestMapping(value = "/ListCampingReviewRe.do",produces = "application/json;charset=UTF-8")
+	public String ListCampingReviewRe(String mb_id) {
+		String str = "";
+		List<CampingReviewReVo> crrList = creDao.ListCampingReviewRe(mb_id);
+		Gson gson = new Gson();
+		str = gson.toJson(crrList);
+		return str;
+	}
+	
+	// 캠핑 댓글 확인
+	@RequestMapping(value = "/bossCheckReviewRe.do", produces = "application/json;charset=UTF-8")
+	public String checkReviewRe(int cre_no) {
+		String str ="";
+		CampingReviewReVo crrVo = creDao.checkReviewRe(cre_no);
+		Gson gson = new Gson();
+		str = gson.toJson(crrVo);
+		return str;
+	}
 }

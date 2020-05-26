@@ -61,14 +61,14 @@ li a:hover:not(.active) {
 		
 		$("#insertCreRe").css("display", "none");
 		
- 		$.ajax("/bossCRRList.do",{data:{},success:function(){
+		$("#btnDeleteCrr").hide();
 			
-		}})//end 댓글상세 ajax
-		 
 		// 1) 리뷰관리 목록 불러오기
 		//$("#crtb").empty();
 		//$("#crtb").html("<th>번호</th><th>아이디</th><th>리뷰글내용</th><th>별점</th><th>리뷰등록일</th><th>댓글현황</th><th>삭제</th>");
-		$.getJSON("/bossCampingReviewList.do",function(data){
+
+		$.ajax("/bossCampingReviewList.do",{data:{"cs_no":cs_no}, success:function(data){
+
 			//alert(data)
 			$.each(data, function(idx,cre){
 				var tr = $("<tr></tr>");
@@ -98,6 +98,7 @@ li a:hover:not(.active) {
 				
 				var cre_no = cre.cre_no;
 				//console.log(cre_no)
+				//console.log(re_check[0])
 								
 				$(tr).append(no, mc_id, cre_contents, cre_rate, cre_date, re_check);
 					
@@ -112,40 +113,70 @@ li a:hover:not(.active) {
 					var idx = $(this).attr("idx");
 					
 					$("#cre_no").val(cre_no);
-					//console.log(cre_no)
+					//console.log(data[idx].re_check)
 					//alert(typeof cre_no)
 					$("#cre_content").val(data[idx].cre_content);
 					$("#mc_id").val(data[idx].mc_id);
 					$("#cre_date").val(data[idx].cre_date);
-					
+							
 					// 2) 리뷰글 댓글 입력하기
 					$("#btnInsertCrr").click(function(){
 						$("#cre_no").val(cre_no);
 						//console.log(cre_no)
 						var ref = $("#reF").serialize();
 						$.ajax("/bossInsertCampinReviewRe.do",{data:ref, success:function(r){
-							alert(r)
+							alert(r);
+							move();
 						}})//end ajax
+				
 					});//end btnInsertCrr
-										
+					
+					//$("#cre_no").val(cre_no);					
+					$.ajax("/getCampingReviewRe.do",{data:{"cre_no":cre_no}, success:function(r){
+						//alert(r)
+						
+						if(r != null){
+							var contents = $("#cre_re_contents").val(r.cre_re_contents);
+							$("#btnDeleteCrr").show();
+							// 댓글 삭제
+							$("#btnDeleteCrr").click(function(){
+								$.ajax("/bossDeleteCampingReviewRe.do",{data:{"cre_re_no":r.cre_re_no}, success:function(r){
+									alert(r)
+									 move()
+								}})//end ajax
+							})//end delete
+
+						}else{
+							var contents = $("#cre_re_contents").val("")
+							$("#btnDeleteCrr").hide();
+
+						}
+					}})//end ajax
+					
 				  })//end clickTR
+				  
+				  
 					
 				$("#bossCreTB").append(tr);  
 							
 			});//end each
 			
-		})//end 리뷰관리 목록
+		}})//end 리뷰관리 목록
 		
-		// 댓글 삭제
-		$("#deleteCreRe").click(function(){
-			
-		})//end delete
+		function move(){
+			window.location.href ="bossReviewManage.html?cs_no="+cs_no;
+		}
+		
+		function deleteCRR(){
+
+		}
 			
 	}); //end function
 </script>
 </head>
 <body>
-	<h1>리뷰 관리 현황</h1>
+	<!--  <h1>리뷰 관리 현황</h1>-->
+	<h1>사업자페이지</h1>
 	<hr>
 	<div class="div Categori">
 		<ul>
@@ -160,6 +191,7 @@ li a:hover:not(.active) {
 	<div class="div line"></div>
 	
 	<div id="bossReviewList">
+		<h2>캠핑장 리뷰 관리</h2>
 		<table id="bossCreTB" border="1">
 			<tr>
 				<th>번호</th>
@@ -170,7 +202,6 @@ li a:hover:not(.active) {
 				<th>댓글현황</th>
 			</tr>
 		</table>
-		<input type="hidden" id="cre_re_no">
 	</div>
 	<br>
 	<div id="insertCreRe">
@@ -186,9 +217,9 @@ li a:hover:not(.active) {
 				<textarea rows="5" cols="70" id="cre_re_contents" name="cre_re_contents"></textarea>
 				<input type="hidden" id="mb_id" name="mb_id" value="test5678">
 				<input type="hidden" id="cre_no" name="cre_no">
-				<input type="hidden" id="cre_re_no" name="cre_re_no">
 		</form>
-		<button id="btnInsertCrr">등록</button>
+		<button id="btnInsertCrr">댓글등록</button>
+		<button id="btnDeleteCrr">댓글삭제</button>
 	</div>
 </body>
 </html>

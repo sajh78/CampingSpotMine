@@ -12,17 +12,21 @@ import com.example.demo.vo.ReserveSearchVo;
 @Repository
 public class ReservationDao {
 	
-	// 5) (사업자) 사업자페이지 메인 예약목록
+	// 6) (사업자) 달력 예약 : 예약 완료
+	public List<BossReservationVo> bossListCalendarCP(HashMap map){
+		return DBmanager.bossListCalendarCP(map);
+	}
+	
+	// 5) (사업자) 달력 예약 : 예약가능 
+	public List<BossReservationVo> bossListCalendarPS(HashMap map){
+		return DBmanager.bossListCalendarPS(map);
+	}
+	
+	// 4) (사업자) 사업자페이지 메인 예약목록
 	public List<BossReservationVo> businessMyPageReservationList(int cs_no){
 		return DBmanager.businessMyPageReservationList(cs_no);
 	}
-	
-	
-	// 4) (사업자) 예약 달력보기
-	public List<ReserveSearchVo> listCalendar(HashMap map) {
-		return DBmanager.listCalendar(map);
-	}
-	
+			
 	// 3) (사업자) 취소승인 업데이트
 	public int updateCancelStatus(int r_no) {
 		return DBmanager.updateCancelStatus(r_no);
@@ -38,9 +42,17 @@ public class ReservationDao {
 		return DBmanager.bossReservationList(cs_no);
 	}
 	
-	// (사업자) 예약 상세정보 => 안씀 xxx
+// ================================================================================================		
+		
+		// (사업자) 예약 상세정보 => 안씀 xxx
 		public BossReservationVo getBossReservationList(int r_no) {
 			return DBmanager.getBossReservationList(r_no);
 		}
+		
+		// (사업자) 예약 달력보기 => 안씀 xxx
+		public List<ReserveSearchVo> listCalendar(HashMap map) {
+			return DBmanager.listCalendar(map);
+		}
 
+		
 }

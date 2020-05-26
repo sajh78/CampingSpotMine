@@ -96,6 +96,9 @@ li a:hover:not(.active) {
 		// 매출목록 함수
 		function sales(){
 			
+			$("#sumTb").hide();
+			$("#total").hide();
+			
 			$("#tbS").empty();
 			$("#tbS").html("<th>번호</th><th>캠핑룸명</th><th>예약번호</th><th>체크인일</th><th>체크아웃일</th><th>총숙박일</th><th>결제요금</th><th>수수료</th><th>순이익</th><th>취소금액</th>");		
 				
@@ -166,7 +169,7 @@ li a:hover:not(.active) {
 		})//end btnTot
 		
 		// 구글챠트
-		chartData = [["Element","Density",{role:"style"}]];
+		chartData = [["Element","이용자수",{role:"style"}]];
 	 
 		/*  chartData.push(["Copper", 8.94, "gold"]);
 		 chartData.push(["Gold", 19.30, "gold"]); */
@@ -209,7 +212,8 @@ li a:hover:not(.active) {
 </script>
 </head>
 <body>
-	<h1>매출관리현황</h1>
+	<!--  <h1>매출관리현황</h1>-->
+	<h1>사업자페이지</h1>
 	<hr>
 	<div class="div Categori">
 		<ul>
@@ -227,10 +231,10 @@ li a:hover:not(.active) {
 		<h2>월별 매출 현황</h2>
 		  <form id="salesF">
 			<select id="month" name="month">
-				<!-- <option value="1">1월</option>
+				<option value="1">1월</option>
 				<option value="2">2월</option>
 				<option value="3">3월</option>
-				<option value="4">4월</option> -->
+				<option value="4">4월</option>
 				<option value="5">5월</option>
 				<option value="6">6월</option>
 				<option value="7">7월</option>

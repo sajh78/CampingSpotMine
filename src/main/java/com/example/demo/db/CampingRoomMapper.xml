@@ -21,7 +21,7 @@
 		where cr.cr_no = b.cr_no and cs_no=#{cs_no})) d where c.cr_no = d.cr_no
 	</select>
 
-	<!-- (사업자) 캠핑룸별 매출 총합계 -->
+	<!-- (사업자) 캠핑룸별 매출 합계 -->
 	<select id="totalByCR" resultType="salesVo">
 		select a.cr_no, cr_name, a.totPrice, a.totComm, a.totMargin from camping_room cr, 
 		(select cr_no, sum(r_price) totPrice, sum(comm) totComm, sum(margin) totMargin from 

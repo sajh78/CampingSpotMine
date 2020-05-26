@@ -63,6 +63,8 @@ public class CampingDao {
 		return DBmanager.insertCampingSpot(csvo);
 	}
 	
+// ================================================================================================	
+	
 	// (사업자) 캠핑장 목록 dao => 사용안함
 	public List<CampingSpotVo> bossCampingSpotList(){
 		return DBmanager.bossCampingSpotList();

@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.io.FileOutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -186,9 +187,10 @@ public class CampingContoller {
 		String cs_camp_fname =""; 	// 캠핑장이미지 파일이름
 		
 		if(CampingUploadFile != null) {
+			
 			cs_camp_fname = CampingUploadFile.getOriginalFilename();
 			System.out.println("캠핑장 오리지널 fname:" + cs_camp_fname);
-
+			
 			try {
 				byte []cdata = CampingUploadFile.getBytes();
 				FileOutputStream cfos = new FileOutputStream(Cpath + "/" + cs_camp_fname);
@@ -229,6 +231,8 @@ public class CampingContoller {
 		cDao.insertCampingSpot(csvo);
 		return str;
 	}
+	
+// ================================================================================================	
 	
 	// (사업자) 캠핑장 목록보기 => 사용안함 xxx
 	@RequestMapping(value = "/bossCampingSpotList.do", produces = "application/json;charset=UTF-8")
